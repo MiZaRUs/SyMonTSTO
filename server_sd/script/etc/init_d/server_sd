@@ -1,0 +1,70 @@
+#!/bin/bash
+#
+# chkconfig: - 99 50
+# description: emoxa
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+# Source networking configuration.
+. /etc/sysconfig/network
+
+if [ ! -x /opt/server_sd/server_sd ]; then
+    exit 1
+fi
+
+RETVAL=0
+
+start() {
+    # Start daemons.
+    for file in /opt/server_sd/bin/*
+    do
+        echo -n $"Starting $file"
+        daemon $file start
+        RETVAL=$?
+        echo
+	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/$prog1
+    done
+return $RETVAL
+}
+
+stop() {
+    # Stop daemons.
+    for file in /opt/server_sd/bin/*
+    do
+        echo -n $"Stopping $file"
+        killproc $file
+        $file stop
+        RETVAL=$?
+        echo
+        [ $RETVAL -eq 0 ] && rm -f /var/lock/subsys/$prog
+    done
+return $RETVAL
+}
+
+# See how we were called.
+case "$1" in
+  start)
+        start
+        ;;
+  stop)
+        stop
+        ;;
+  restart|reload)
+        stop
+        start
+        RETVAL=$?
+        ;;
+  status)
+        for file in /opt/server_sd/bin/*
+    	do
+            status $file
+    	    RETVAL=$?
+	done
+        ;;
+  *)
+        echo $"Usage: $0 {start|stop|restart|status}"
+        exit 2
+esac
+
+exit $RETVAL

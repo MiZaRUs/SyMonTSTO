@@ -1,0 +1,33 @@
+#!/usr/bin/perl -w
+use DBI;
+$user_bd = 'oleg';
+$host_bd = 'DBI:mysql:server_sd';
+$basename = "server_sd";
+$execpath = "bin";
+$rez = 0; 
+###############################################################################
+$cmd = "rm $execpath";
+$cmd .= "/*";
+    if( `$cmd` ){
+	$rez = 1;
+    }
+#------------------------
+$dbh = DBI->connect($host_bd,$user_bd,'');
+$sth = $dbh->prepare("SELECT names  FROM netconf WHERE tcpport > 0");
+$sth->execute;
+while( ($name) = $sth->fetchrow() ) {
+    $command = "ln -s ../";
+    $command .= $basename;
+    $command .= " ";
+    $command .= $execpath;
+    $command .= "/";
+    $command .= $name;
+    if( `$command` ){
+	$rez = 1;
+    }
+#  --
+}
+$sth->finish;
+$dbh->disconnect;
+exit $rez;
+#----------------------------------------------------------------------------

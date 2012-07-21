@@ -1,0 +1,14 @@
+USE server_sd;
+
+CREATE TABLE netconf ( names VARCHAR(24) NOT NULL, devnet VARCHAR(24) NOT NULL, tcpport INT NOT NULL, tcicle INT NOT NULL, timeaut INT NOT NULL, tpause INT NOT NULL, tbldev VARCHAR(24) NOT NULL, tbldata VARCHAR(24) NOT NULL, tblarch VARCHAR(24) NOT NULL, PRIMARY KEY (names)) CHARACTER SET utf8 COLLATE utf8_general_ci;
+INSERT netconf (names,devnet,tcpport,tcicle,timeaut,tpause,tbldev,tbldata,tblarch) VALUES ('serv_tm','192.168.2.2',4001,10000,500,200,'xdevices','xdata','xarch');
+INSERT netconf (names,devnet,tcpport,tcicle,timeaut,tpause,tbldev,tbldata,tblarch) VALUES ('serv_ai','192.168.2.22',950,2000,500,200,'xdevices','xdata','xarch');
+
+CREATE TABLE xdevices ( id INT NOT NULL, adr INT(3) NOT NULL, driver VARCHAR(24) NOT NULL, name VARCHAR(24) NOT NULL, reg INT(3) NOT NULL, param VARCHAR(24) NOT NULL, format VARCHAR(24) NOT NULL, sname VARCHAR(24), PRIMARY KEY (id)) CHARACTER SET utf8 COLLATE utf8_general_ci;
+INSERT xdevices(id,adr,driver,name,reg,param,format,sname ) VALUES (1, 1, 'ELEMER', 'TM5132', 4, '6;0;4;f;', '-50.0/150.0', 'x');
+INSERT xdevices(id,adr,driver,name,reg,param,format,sname ) VALUES (13, 21, 'DCON', 'MB110_16D', 16, ';;;b;', '0/1', 'serv_xx');
+INSERT xdevices(id,adr,driver,name,reg,param,format,sname ) VALUES (14, 1, 'OWEN', 'PLC160_AI', 1, ';;;f;', '0/1000', 'serv_xx');
+
+CREATE TABLE xarch ( id INT NOT NULL, reg INT NOT NULL, utime INT NOT NULL, data INT NOT NULL, PRIMARY KEY (id, reg, utime) ) CHARACTER SET utf8 COLLATE utf8_general_ci;
+CREATE TABLE xdata ( id INT NOT NULL, reg INT NOT NULL, utime INT NOT NULL, data INT NOT NULL, diap INT NOT NULL, modif FLOAT NOT NULL,  PRIMARY KEY (id, reg) ) CHARACTER SET utf8 COLLATE utf8_general_ci;
+CREATE TABLE object ( id INT NOT NULL, reg INT NOT NULL, obj VARCHAR(24) NOT NULL, oborud VARCHAR(24), name VARCHAR(24), param VARCHAR(32), comment VARCHAR(42), PRIMARY KEY (id, reg) ) CHARACTER SET utf8 COLLATE utf8_general_ci;

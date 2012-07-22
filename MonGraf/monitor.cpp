@@ -2,11 +2,7 @@
 
 // ----------------------------------------------------------------------
 Monitor::Monitor(void) : QWidget(){
-// ind_element, setka
-//    setCursor(Qt::PointingHandCursor);
     setMinimumSize(80, 100);
-//  --
-//qDebug() << "Monitor::Monitor";
 //  --
     plout = new QVBoxLayout;
     plout->setMargin(2);
@@ -72,17 +68,8 @@ WxGrid::WxGrid(void) : QWidget(){
     pin = new QPointF[maxPin+1];	// буфер данных
 //  --
     color = QColor(200, 0, 0); // цвет тренда красный
-/*    QColor c1(200, 0, 0); // krasn
-    QColor c2(0, 122, 0); // zelen
-    QColor c3(255, 0, 255); //seren
-    QColor c4(0, 0, 200); // siniy
-    QColor c5(100, 100, 0); //korich
-    QColor c6(0, 165, 155); //golub
-    QColor c7(170, 170, 0); //jelt
-*/
     show();
 }// End WxGrid
-//WxGrid::WxGrid(int mx, int bx, int my, int by) : QWidget(){}
 // ----------------------------------------------------------------------
 void WxGrid::drawGrid(QPainter *painter){
     if(poz < 1 )poz = ysm;

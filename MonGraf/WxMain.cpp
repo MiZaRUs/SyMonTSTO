@@ -4,7 +4,6 @@
 void WxMain::msgError(QString snm, QString ser){
         pLayout = new QGridLayout;
         QLabel *labx1 = new QLabel("<h3><font color=red>"+ snm +"</font></h3>");
-//        QLabel *labx2 = new QLabel("<font color=blue>"+ ser +"</font>");
         QLabel *labx2 = new QLabel(QString("<font color=blue>%1</font>").arg(ser));
         pLayout->addWidget(labx1, 0, 0);    
         pLayout->addWidget(labx2, 1, 0);    
@@ -217,7 +216,7 @@ void WxMain::slotTimerRefresh(){
 //qDebug() << "TimerRfresh\n";
     if(pId > 0){
         if(!pSql->exec(QString("SELECT data FROM xdata WHERE id = %1 AND reg = %2").arg(pId).arg(pReg))){
-            qDebug() << "Xren BAM 3";
+            qDebug() << "TimeRefresh: Error SELECT.";
 	}else{
 	    while (pSql->next()){
 		int d = pSql->value(0).toInt();
@@ -249,12 +248,6 @@ void WxMain::slotActivHelp(){
                 "<H2><CENTER> Справка </CENTER></H2>"
                 "<P ALIGN=\"left\">"
                     "-9000 : Прибор не отвечает.<BR>"
-                    "-9900 : Прибор неисправен.<BR>"
-                    "-9901 : К.З. датчика.<BR>"
-                    "-9903 : Нет канала.<BR>"
-                    "-9906 : Канал не доступен.<BR>"
-                    "-9908 : Обрыв датчика.<BR>"
-                    "-9998 : Ошибка обмена.<BR>"
                     "-9999 : Ошибка КС.<BR>"
                     "<BR>"
                     "<BR>"
@@ -262,7 +255,7 @@ void WxMain::slotActivHelp(){
         	"</P>"
                 "<H3><CENTER> Версия 0.7.7 </CENTER></H3>"
                 "<H4><CENTER> Февраль 2010 </CENTER></H4>"
-                "<H4><CENTER> Июнь 2011 </CENTER></H4>"
+                "<H4><CENTER> Июль 2012 </CENTER></H4>"
                 "<H4><CENTER> Широков О.Ю. </CENTER></H4>"
                 "<BR>"
                 "</BODY>"
@@ -270,11 +263,6 @@ void WxMain::slotActivHelp(){
                ));
         txt->resize(250, 200);
         txt->show();
-//                "<BODY BGCOLOR=MAGENTA>"
-//                "<FONT COLOR=BLUE>"
-//                "</FONT>"
-//    }
-//    qDebug() << tr("Справка");  
 return;
 }// End slot
 // ----------------------------------------------------------------------
@@ -282,6 +270,4 @@ void WxMain::slotActivExit(){
     close();
 return;
 }// End slot
-// ----------------------------------------------------------------------
-//    setHtml(QString("<BODY BGCOLOR=%1></BODY>").arg(strColor));
 // ----------------------------------------------------------------------

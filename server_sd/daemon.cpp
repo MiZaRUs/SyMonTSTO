@@ -22,7 +22,7 @@
 //  -------------------------------------------------------------------------
 Daemon::Daemon(string name){
     d_name = name;
-    pidfile = pidputh + name + ".pid";
+    pidfile = pidpath + name + ".pid";
     pid = 0;
     fid = readPidFile();
 

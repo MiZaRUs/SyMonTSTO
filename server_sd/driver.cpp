@@ -249,10 +249,10 @@ int Driver::unpakOWEN(unsigned char adr){	// распаковка OWEN
     if((buf_len < 16) || (buf_len >= MAXBUF)) return E_DN;
 //cout << "прверить начало '#' и конец '0xD' в buf_r" << endl;
     if(( buf[0] != 0x23 ) || ( buf[buf_len-1] != 0xD ))return E_DN;
-// заполнить owen_frame и прверить пердел символов 'G ... V'.
+// заполнить owen_frame и прверить предел символов 'G ... V'.
 	int i, j;
     unsigned char frame[21];
-//cout <<  "прверить перделы символов (G ... V)" << endl;
+//cout <<  "прверить пределы символов (G ... V)" << endl;
 	for (i = 1, j = 0; i < buf_len-2;  i += 2, ++j){
 		if(( 'G' > buf[i] ) && ( buf[i] > 'V' )) break;
 		if(( 'G' > buf[i+1] ) && ( buf[i+1] > 'V' )) break;

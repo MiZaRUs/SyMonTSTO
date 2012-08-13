@@ -125,7 +125,7 @@ int Device::refreshMB110_16D(int i){ //MB110_16D
     }// end mb...
 //  --
     if(Request( adr, cmd, cmd_len )) Response(adr);
-printf("RezultRefreshOwen: %d\n", err);
+//printf("RezultRefreshOwen: %d\n", err);
 //  --
     if(err){
         setErrData(err);

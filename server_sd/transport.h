@@ -14,7 +14,7 @@
 #include <netdb.h>
 #include <string>
 //  -------------------
-#include "main.h"
+#include "defs.h"
 //  -------------------
 using namespace std;
 //----------------------------------------------------------------

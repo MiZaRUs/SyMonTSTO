@@ -14,7 +14,7 @@
 //  --
 #include "dbwriter.h"
 
-//#define DEBUG
+#define DEBUG
 //  -------------------------------------------------------------------------
 using namespace std;
 //  -------------------------------------------------------------------------
@@ -177,7 +177,7 @@ return true;
 //  -------------------------------------------------------------------------
 bool DBWriter::new_wr(Device *dd){
 //cout << "Создать новую запись.\n";
-    string qu = "INSERT " + data_name + " ( id, reg, utime, data, diap ) VALUES ( ";
+    string qu = "INSERT " + data_name + " ( id, reg, utime, data, diap, modif, comment, flag ) VALUES ( ";
     char st[20];
     sprintf(st, "%d, ", dd->getID());
     qu.append(st);
@@ -187,9 +187,11 @@ bool DBWriter::new_wr(Device *dd){
     qu.append(st);
     sprintf(st, "%d, ", dd->getData(curd));
     qu.append(st);
-    sprintf(st, "%d)", dd->getDiap(curd));
+    sprintf(st, "%d, ", dd->getDiap(curd));
     qu.append(st);
-//    qu.append("100)");
+    sprintf(st, "%f, ", dd->getModif(curd));
+    qu.append(st);
+    qu.append("'?comment?', 0)");
 //cout << qu << endl;
     if(mysql_query(&mysql_rw, qu.c_str())){
         msg.append("-new_wr MySQL: ");

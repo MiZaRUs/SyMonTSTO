@@ -20,7 +20,7 @@
 #include "config.h"
 #include "dbwriter.h"
 //  --
-//#define DEBUG
+#define DEBUG
 //  ---------------------------------
 using namespace std;
 //  -------------------------------------------------------------------------
@@ -37,7 +37,7 @@ cout << "\nWheel::Wheel(" << nameserv << ")           **************************
     cfg = new Config(nameserv); // при неудаче исключение FError(msg)
 
 #ifdef DEBUG
-cout << "Wheel >> NetConf: " << cfg->getDevNet() << "  PS: " << cfg->getPort() << "  TM: " << cfg->getTimeAut() << endl;
+cout << "Wheel >> NetConf: " << cfg->getHost() << "  PS: " << cfg->getPort() << "  TM: " << cfg->getTimeAut() << endl;
 #endif
 }// End Wheel
 //**************************************************//
@@ -59,7 +59,7 @@ cout << "WARNING - " << cn << " : " << trt->getMsg();
 #endif
         syslog(LOG_LOCAL0|LOG_INFO, "WARNING: Init: %s", trt->getMsg().c_str());
         sleep(2);
-        if(!--cn) throw FError(trt->getMsg());
+        if(!--cn) throw (string)trt->getMsg();
     } while(trt->status() < 1);
 //-------------------------------------
 
@@ -71,7 +71,7 @@ cout << "WARNING - " << cn << " : " << trt->getMsg();
 cout << "MaxDev: " << maxdev << endl;
 #endif
     dd = new Device* [maxdev];
-    if(!dd) throw FError("Serv >> Memory - failed");
+    if(!dd) throw (string)"Serv >> Memory - failed";
 //-------------------------------------
 
 
@@ -128,7 +128,7 @@ cout << "New" << endl;
 #ifdef DEBUG
 cout << "ReConnect..." << endl;
 #endif
-                int cn = 2000; // попытки
+                int cn = 20000; // попытки
                 do{
                     if(trt) delete trt;
                     trt = new TransPort(cfg->getHost(), cfg->getPort(), cfg->getTimeAut());
@@ -140,7 +140,7 @@ cout << "WARNING - " << cn << " : " << mess << " - " << endl;
 #endif
                     syslog(LOG_LOCAL0|LOG_INFO, "WARNING: Reconnect: %s", mess.c_str());
                     sleep(10);
-                    if(!--cn) throw FError(mess);
+                    if(!--cn) throw (string)mess;
                 } while(trt->status() < 1);
 #ifdef DEBUG
 cout << "OK." << endl;

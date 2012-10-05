@@ -18,7 +18,7 @@
 #include <iostream>
 //  --
 #include "daemon.h"
-#include "main.h"
+#include "defs.h"
 #include "config.h"
 #include "transport.h"
 #include "device.h"

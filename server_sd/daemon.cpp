@@ -18,7 +18,7 @@
 #include <sys/stat.h>
 #include <iostream>
 
-//#define DEBUG
+#define DEBUG
 //  -------------------------------------------------------------------------
 Daemon::Daemon(string name){
     d_name = name;

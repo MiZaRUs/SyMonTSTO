@@ -16,7 +16,7 @@
 #include "driver.h"
 #include "config.h"
 #include "transport.h"
-#include "main.h"
+#include "defs.h"
 //----------------------------------------------------------------
 using namespace std;
 //----------------------------------------------------------------
@@ -31,6 +31,7 @@ class Device : Driver{	// виртуальная копия устройства
     time_t time_refresh;// время обновления данных
     int    *idata;	// массив данных в формате b, i, или f *100
     int    idiap;	// диапазон
+    float  fmodif;	// модификатор
     int    pause;
     int    count;	// подсчет циклов обновления
 //  --
@@ -49,6 +50,7 @@ public:
     int getTime(void){ return (int)time_refresh;};// возвращает unix-время обновления
 //  --
     int getDiap(int rg = 0){return idiap;};	// возвращает предел изменений данных
+    float getModif(int rg = 0){return fmodif;};	// возвращает модификатор данных
 //  --
 //protected:
 private:

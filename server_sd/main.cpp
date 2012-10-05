@@ -15,7 +15,7 @@
 //  --
 #include "wheel.h"
 
-//#define DEBUG
+#define DEBUG
 
 #define MAXNAME 31
 static Wheel *serv;
@@ -29,7 +29,7 @@ int main(int argc, char *argv[]){
 
 /* Инициализация основных объектов */
 try{
-    if(d_name.length() > MAXNAME) throw FError("Main:d_name.length()!");
+    if(d_name.length() > MAXNAME) throw (string)"Main:d_name.length()!";
 
 //    serv = new Wheel("serv_tm"); // (perent Daemon)
 //    serv->Command("start");
@@ -56,12 +56,12 @@ try{
 //  --
 
 //  -------------------------------------------------------------------------
-    }catch( FError e){
+    }catch( string e){
 #ifdef DEBUG
-cout << "FATAL_ERROR " << e.getMsg() << endl << "Exit." << endl;
+cout << "FATAL_ERROR " << e << endl << "Exit." << endl;
 #endif
-    syslog(LOG_LOCAL0|LOG_INFO|LOG_ERR, "FATAL_ERROR: %s", e.getMsg().c_str());
-//    syslog(LOG_LOCAL0|LOG_ERR, "FATAL_ERROR: %s", e.getMsg().c_str());
+    syslog(LOG_LOCAL0|LOG_INFO|LOG_ERR, "FATAL_ERROR: %s", e.c_str());
+//    syslog(LOG_LOCAL0|LOG_ERR, "FATAL_ERROR: %s", e.c_str());
     closelog();
     }
 return EXIT_FAILURE;

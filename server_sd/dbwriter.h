@@ -16,7 +16,7 @@
 #include <string>
 #include <time.h>
 //  --
-#include "main.h"
+#include "defs.h"
 #include "config.h"
 #include "device.h"
 //----------------------------------------------------------------

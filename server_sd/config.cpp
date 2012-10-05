@@ -12,9 +12,9 @@
 //  --
 #include "config.h"
 //  --
-//#define DEBUG
+#define DEBUG
 //  -------------------------------------------------------------------------
-using namespace std;
+//using namespace std;
 //  -------------------------------------------------------------------------
 Config::Config(string sname){
     msg = "Config";
@@ -45,14 +45,13 @@ Config::Config(string sname){
     maxdev = 1;
 // End For Device
 // --
-    tbl_dev = "xdevices";
-    tbl_dat = "xdata";
-    tbl_arc = "xarch";
+    tbl_dat = "data_xx";
+    tbl_arc = "arch_xx";
 //  --
 //  Загрузка параметров сети
-   if(!loadNetConf()) throw FError(msg);
+   if(!loadNetConf()) throw (string)msg;
 // Загрузка параметров оборудования
-   if(!loadDevConf()) throw FError(msg);
+   if(!loadDevConf()) throw (string)msg;
 }// End
 //  -------------------------------------------------------------------------
 // загрузка из локальной БД 
@@ -64,8 +63,8 @@ bool Config::loadNetConf(void){
         msg.append(mysql_error(&mysql));
         return false;
     }
-//  --                                0        1        2         3       4          5          6        7        8
-    string qu = "SELECT names,devnet,tcpport,tcicle,timeaut,tpause,tbldev,tbldata,tblarch FROM ";
+//  --                  0      1      2       3      4       5      6       7
+    string qu = "SELECT names,devnet,tcpport,tcicle,timeaut,tpause,tbldata,tblarch FROM ";
     qu.append(TBLCNF);
     qu.append(" WHERE tcpport > 0 AND names = '");
     qu.append(nameserv);
@@ -97,9 +96,8 @@ cout << "> MySql(" << BDHOST << " : " << BDNAME << "." << nameserv << ")." << en
         tcicle  = atoi(row[3]);
         timeaut = atoi(row[4]);
         tpause  = atoi(row[5]);
-        tbl_dev = row[6];
-        tbl_dat = row[7];
-        tbl_arc = row[8];
+        tbl_dat = row[6];
+        tbl_arc = row[7];
 //  --
     }else{
         tcpport = 0;
@@ -127,9 +125,9 @@ cout << "DevWheel::readConf()\n";
         msg.append(mysql_error(&mysql));
         return false;
     }
-//  --                              0   1     2        3        4     5         6
+//  --                  0    1    2       3     4    5      6
     string qu = "SELECT id, adr, driver, name, reg, param, format FROM ";
-    qu.append(tbl_dev);
+    qu.append(TBLDEV);
     qu.append(" WHERE adr > 0 AND reg > 0 AND sname = '");
     qu.append(nameserv);
     qu.append("'");
@@ -138,7 +136,7 @@ cout << "DevWheel::readConf()\n";
         msg.append(" MySQL: ");
         msg.append(mysql_error(&mysql));
         mysql_close(&mysql);
-        throw FError(msg);
+        throw (string)msg;
         return false;
     }
 //  --
@@ -147,7 +145,7 @@ cout << "DevWheel::readConf()\n";
         msg.append(" MySQL: ");
         msg.append(mysql_error(&mysql));
         mysql_close(&mysql);
-        throw FError(msg);
+        throw (string)msg;
         return false;
     }
 //  --
@@ -157,7 +155,7 @@ cout << ">>>  "<< num << "  <<<\n";
 #endif
     if(num < 1 || num > 255){
         msg = " for ";
-        msg.append(tbl_dev);
+        msg.append(TBLDEV);
         msg.append(" Reader: 0 OR > 255 records.");
         maxdev = 0;
         return false;

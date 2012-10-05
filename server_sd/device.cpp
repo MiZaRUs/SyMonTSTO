@@ -30,6 +30,7 @@ Device::Device(Config *cfg, TransPort *transp) : Driver(cfg->getDriver(), transp
     idata = NULL;
     creg = 1;
     idiap = 100;
+    fmodif = 1;
     pause = cfg->getTPause();
 //  --
     refresh = &Device::refreshXXX;
@@ -40,21 +41,23 @@ Device::Device(Config *cfg, TransPort *transp) : Driver(cfg->getDriver(), transp
     if(name == "TM5132"){
         msg.append(" -Y");
         creg = 4;
-//        idiap = 50;
+        idiap = 70;
+        fmodif = 0.01;
         refresh = &Device::refreshTM5132;
     }
 //  --
     if(name == "MB110_16D"){
         msg.append(" -Y");
         creg = 16;
-//        idiap = 0;
+        idiap = 1;
+        fmodif = 0;
         refresh = &Device::refreshMB110_16D;
     }
 //  --
     if(name == "UBZ_301_BO"){
         msg.append(" -Y");
         creg = 13;
-        idiap = 0;
+        idiap = 100;
         refresh = &Device::refreshUBZ_301_BO;
     }
 //  --
@@ -62,6 +65,7 @@ Device::Device(Config *cfg, TransPort *transp) : Driver(cfg->getDriver(), transp
         msg.append(" -Y");
         creg = 1;
         idiap = 50;
+        fmodif = 50;
         refresh = &Device::refreshPLC160_AI;
     }
 //----------------------------------------------------

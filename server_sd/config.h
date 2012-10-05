@@ -15,7 +15,7 @@
 #include <stdlib.h>
 #include <string>
 //  --
-#include "main.h"
+#include "defs.h"
 //----------------------------------------------------------------
 using namespace std;
 //----------------------------------------------------------------
@@ -47,7 +47,6 @@ public:
 //    string getDBAddr(void){ return dbadr;};	// URL базы данных
 //    string getDBName(void){ return dbname;};	// имя базы данных
 //    string getDBDriv(void){ return dbdriv;};	// драйвер базы данных
-    string getTblDevice(void){ return tbl_dev;};
     string getTblData(void){ return tbl_dat;};
     string getTblArch(void){ return tbl_arc;};
 //  --
@@ -80,7 +79,7 @@ private:
 //    string dbadr;	// URL базы данных
 //    string dbname;	// имя базы данных
 //    string dbdriv;	// драйвер базы данных
-    string tbl_dev;	// таблица устройств					VARCHAR(24)
+//    string tbl_dev;	// таблица устройств					VARCHAR(24)
     string tbl_dat;	// таблица текущих данных				VARCHAR(24)
     string tbl_arc;	// таблица арнивных данных				VARCHAR(24)
 //  --

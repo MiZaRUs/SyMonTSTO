@@ -42,21 +42,13 @@
 #define E_WNO E_ER - 9906	//Недоступно - отключен
 #define E_OBR  E_ER - 9908	//переполнен вверх +1
 //----------------------------------------------------------------
-class FError{
-public:
-    FError(std::string s) : m_s(s){};
-    ~FError(){};
-    std::string getMsg(){return m_s;}
-private:
-    std::string m_s;
-};//  --
-//----------------------------------------------------------------
-const char BDHOST[] = "192.168.2.2";	// IP MySql-сервера 
+const char BDHOST[] = "10.0.10.45";	// IP MySql-сервера 
 //const char BDHOST[] = "localhost";	// IP MySql-сервера 
 const char BDNAME[] = "server_sd";	// Имя базы данных
 const char BDUSER[] = "oleg";		// Имя пользователя
 const char BDPASS[] = "";		// Пароль пользователя
-const char TBLCNF[] = "netconf";	// Таблица конфигурации
+const char TBLCNF[] = "netconf";	// Таблица конфигурации сети
+const char TBLDEV[] = "devices";	// Таблица устройств ввода данных
 //----------------------------------------------------------------
 const int MAXBUF = 127;			// Максимальная длинна буфера обмена
 const int MAXSTRBDATA = 10;

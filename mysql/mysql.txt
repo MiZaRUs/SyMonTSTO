@@ -14,10 +14,10 @@ INSERT devices(id,adr,driver,name,reg,param,format,sname ) VALUES (14, 1, 'OWEN'
 CREATE TABLE arch_ai ( id INT NOT NULL, reg INT NOT NULL, utime INT NOT NULL, data INT NOT NULL, PRIMARY KEY (id, reg, utime) ) CHARACTER SET utf8 COLLATE utf8_general_ci;
 CREATE TABLE arch_di ( id INT NOT NULL, reg INT NOT NULL, utime INT NOT NULL, data INT NOT NULL, PRIMARY KEY (id, reg, utime) ) CHARACTER SET utf8 COLLATE utf8_general_ci;
 
-CREATE TABLE data_ai ( id INT NOT NULL, reg INT NOT NULL, utime INT NOT NULL, data INT NOT NULL, diap INT NOT NULL, modif FLOAT NOT NULL, param VARCHAR(40), comment VARCHAR(40), flag INT, PRIMARY KEY (id, reg) ) CHARACTER SET utf8 COLLATE utf8_general_ci;
-CREATE TABLE data_di ( id INT NOT NULL, reg INT NOT NULL, utime INT NOT NULL, data INT NOT NULL, diap INT NOT NULL, modif FLOAT NOT NULL, param VARCHAR(40), comment VARCHAR(40), flag INT, PRIMARY KEY (id, reg) ) CHARACTER SET utf8 COLLATE utf8_general_ci;
+CREATE TABLE data_ai ( id INT NOT NULL, reg INT NOT NULL, utime INT NOT NULL, data INT NOT NULL, diap INT NOT NULL, modif FLOAT NOT NULL, param  INT NOT NULL, object INT NOT NULL, flag INT, PRIMARY KEY (id, reg) ) CHARACTER SET utf8 COLLATE utf8_general_ci;
+CREATE TABLE data_di ( id INT NOT NULL, reg INT NOT NULL, utime INT NOT NULL, data INT NOT NULL, diap INT NOT NULL, modif FLOAT NOT NULL, param  INT NOT NULL, object INT NOT NULL, flag INT, PRIMARY KEY (id, reg) ) CHARACTER SET utf8 COLLATE utf8_general_ci;
 
-CREATE TABLE object ( id INT NOT NULL, reg INT NOT NULL, obj VARCHAR(24) NOT NULL, oborud VARCHAR(24), name VARCHAR(24), param VARCHAR(32), comment VARCHAR(42), PRIMARY KEY (id, reg) ) CHARACTER SET utf8 COLLATE utf8_general_ci;
-CREATE TABLE object ( ident VARCHAR(24) NOT NULL, ceh VARCHAR(24) NOT NULL, obj VARCHAR(24) NOT NULL, id INT NOT NULL, reg INT NOT NULL, PRIMARY KEY (id, reg) ) CHARACTER SET utf8 COLLATE utf8_general_ci;
+CREATE TABLE object ( id INT NOT NULL, ident VARCHAR(24) NOT NULL, area VARCHAR(24) NOT NULL, name VARCHAR(24), comment VARCHAR(40), PRIMARY KEY (id) ) CHARACTER SET utf8 COLLATE utf8_general_ci;
+CREATE TABLE param ( id INT NOT NULL, name VARCHAR(32) NOT NULL, comment VARCHAR(40) NOT NULL, PRIMARY KEY (id) ) CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 

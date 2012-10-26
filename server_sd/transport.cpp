@@ -11,7 +11,6 @@
 #include <string.h>
 #include <stdio.h>
 #include <iostream>
-//#include <string>
 //  --
 #include "transport.h"
 //  --

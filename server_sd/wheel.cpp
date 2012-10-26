@@ -11,8 +11,6 @@
 #include <string.h>
 #include <signal.h>
 #include <iostream>
-//#include <fcntl.h>
-//#include <stdio.h>
 #include <errno.h>
 //  --
 #include "wheel.h"
@@ -165,7 +163,6 @@ cout << "OK." << endl;
 #ifdef DEBUG
 cout << "End. Ждем: " << (cfg->getTCicle() / 1000 )<< " сек.\n";
 #endif
-//    sleep(cfg->getTCicle()); //  ждем в секундах
     usleep( cfg->getTCicle() * 1000); // ждем милисекундах
     }// while
 }// End Run

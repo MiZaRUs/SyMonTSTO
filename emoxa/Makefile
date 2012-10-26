@@ -18,7 +18,7 @@ clean:
 install:
 	chmod 550 emoxa 
 	mv -f emoxa /opt/
-	cp -fR ./init.d/* /etc/init.d/
-	/sbin/chkconfig --add emoxa
-	/sbin/chkconfig --list emoxa
+#	cp -fR ./init.d/* /etc/init.d/
+#	/sbin/chkconfig --add emoxa
+#	/sbin/chkconfig --list emoxa
 #	"/usr/sbin/ntsysv"

@@ -13,7 +13,6 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
-//#include <mysql/mysql.h>
 #include <string>
 #include <iostream>
 //  --

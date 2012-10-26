@@ -61,7 +61,6 @@ try{
 cout << "FATAL_ERROR " << e << endl << "Exit." << endl;
 #endif
     syslog(LOG_LOCAL0|LOG_INFO|LOG_ERR, "FATAL_ERROR: %s", e.c_str());
-//    syslog(LOG_LOCAL0|LOG_ERR, "FATAL_ERROR: %s", e.c_str());
     closelog();
     }
 return EXIT_FAILURE;

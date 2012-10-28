@@ -9,7 +9,7 @@
  **************************************************************************/
 #include <stdlib.h>
 #include <iostream>
-#include <string>
+#include <string.h>
 #include <syslog.h>
 #include <signal.h>
 

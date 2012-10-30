@@ -18,11 +18,8 @@
 using namespace std;
 //----------------------------------------------------------------
 class Driver{
-//  --
-    TransPort *trp;
-//----------------------------------------------------------------
 public:
-    Driver(string drv, TransPort *tr);// "OWEN"|"ELEMER"|"DCON"|"MODBUS_RTU"|"MODBUS_ASCII"
+    Driver(string drv);// "OWEN"|"ELEMER"|"DCON"|"MODBUS_RTU"|"MODBUS_ASCII"
     ~Driver();
 //  --
     bool Request(unsigned char adr,unsigned char *data, int len);	// запрос
@@ -48,6 +45,8 @@ private:
     int unpakXXX(unsigned char adr);	//пустышка
 //  --
 protected:
+    TransPort *trp;
+//  --
     int err;
     string msg;
     int buf_len;

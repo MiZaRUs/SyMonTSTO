@@ -23,7 +23,8 @@ install:
 	chmod 550 server_sd 
 	mv -f server_sd /opt/server_sd/
 #	mv -f server_sd ./script/server_sd/
-#	cp -fR ./script/init_d/* /etc/init.d/
 #	cp -fR ./script/server_sd /opt/
+#	cp -fR ./script/init.d/* /etc/init.d/
 #	/sbin/chkconfig --add server_sd
 #	/sbin/chkconfig --list server_sd
+#	"/usr/sbin/ntsysv"

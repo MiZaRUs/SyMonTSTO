@@ -7,8 +7,8 @@
  *  the Free Software Foundation; version 2 of the License, or            *
  *  (at your option) any later version.                                   *
  **************************************************************************/
-#ifndef Main_class
-#define Main_class
+#ifndef Main_Defs
+#define Main_Defs
 
 #include <string>
 //  --
@@ -16,15 +16,6 @@
 //  --
 
 #define E_ER  -2000000000	//ошибка ?
-//  --
-//#define E_MEM  		//Ошибкa выделения памяти - Авар.
-//  --
-// ошибки БД
-//#define NO_BD  17		//ошибка соединения с бд - аварийный выход
-//#define NO_REZ 21		//ошибка результата ???
-//#define NO_QU  22		//ошибка запроса к бд - попробовать пересоздать таблицу
-//#define NO_REC 23		//нет записей - надо создать
-//#define E_CNF  24		//неверное количество записей ??? сонфиг
 //  --
 // ошибки обмена
 #define E_SOCKET   E_ER - 9000	//E_SOCKET - ошибка соединения
@@ -42,7 +33,7 @@
 #define E_WNO E_ER - 9906	//Недоступно - отключен
 #define E_OBR  E_ER - 9908	//переполнен вверх +1
 //----------------------------------------------------------------
-const char BDHOST[] = "10.0.10.45";	// IP MySql-сервера 
+const char BDHOST[] = "192.168.2.2";	// IP MySql-сервера 
 //const char BDHOST[] = "localhost";	// IP MySql-сервера 
 const char BDNAME[] = "server_sd";	// Имя базы данных
 const char BDUSER[] = "oleg";		// Имя пользователя

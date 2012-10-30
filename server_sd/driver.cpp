@@ -13,14 +13,16 @@
 #include <math.h>
 #include <string.h>
 //  --
+//#include <memory.h>
+//  --
 #include "driver.h"
 //  --
-//#define DEBUG
+////#define DEBUG
 //  ----------------------------------------------------------
-Driver::Driver(string name, TransPort *tr){
+Driver::Driver(string name){
     msg = "Driver: ";
     msg.append(name);
-    trp = tr;
+    trp = NULL;
     buf[0]=0;
     buf_len=0;
 //  --
@@ -62,6 +64,7 @@ Driver::Driver(string name, TransPort *tr){
 //  ----------------------------------------------------------
 /************************************************************/
 bool Driver::Request(unsigned char adr, unsigned char *data, int len){
+    if(trp == NULL) return false;
     err = 0; 
     buf_len = 0;
     memset(buf, 0, sizeof(buf));
@@ -76,6 +79,7 @@ bool Driver::Request(unsigned char adr, unsigned char *data, int len){
 }
 //  ----------------------------------------------------------
 bool Driver::Response(unsigned char adr){
+    if(trp == NULL) return false;
     err = E_TR_RCV ;
     buf_len = 0;
     memset(buf, 0, sizeof(buf));
@@ -247,10 +251,10 @@ int Driver::unpakOWEN(unsigned char adr){	// распаковка OWEN
     if((buf_len < 16) || (buf_len >= MAXBUF)) return E_DN;
 //cout << "прверить начало '#' и конец '0xD' в buf_r" << endl;
     if(( buf[0] != 0x23 ) || ( buf[buf_len-1] != 0xD ))return E_DN;
-// заполнить owen_frame и прверить предел символов 'G ... V'.
+// заполнить owen_frame и прверить пердел символов 'G ... V'.
 	int i, j;
     unsigned char frame[21];
-//cout <<  "прверить пределы символов (G ... V)" << endl;
+//cout <<  "прверить перделы символов (G ... V)" << endl;
 	for (i = 1, j = 0; i < buf_len-2;  i += 2, ++j){
 		if(( 'G' > buf[i] ) && ( buf[i] > 'V' )) break;
 		if(( 'G' > buf[i+1] ) && ( buf[i+1] > 'V' )) break;
@@ -330,6 +334,8 @@ int Driver::unpakXXX(unsigned char adr){	// заглушка
 return 0;
 }// End decoderXXX
 //  -------------------------------------------------------------------------
+/*************************************************************/
+
 //  -------------------------------------------------------------------------
 //              Вспомогательные функции
 //  -------------------------------------------------------------------------
@@ -394,6 +400,7 @@ char Driver::hex2char(char c){
 return c;
 }// End hex2char
 //  -------------------------------------------------------------------------
+/*************************************************************/
 Driver::~Driver(){
 //    delete[] idata;
 }// End

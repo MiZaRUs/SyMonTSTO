@@ -7,18 +7,14 @@
  *  the Free Software Foundation; version 2 of the License, or            *
  *  (at your option) any later version.                                   *
  **************************************************************************/
-#include <syslog.h>
 #include <string.h>
 #include <signal.h>
-#include <iostream>
 #include <errno.h>
+#include <syslog.h>
 //  --
 #include "wheel.h"
-#include "device.h"
-#include "config.h"
-#include "dbwriter.h"
 //  --
-#define DEBUG
+//#define DEBUG
 //  ---------------------------------
 using namespace std;
 //  -------------------------------------------------------------------------
@@ -47,7 +43,7 @@ void Wheel::Init(void){
 #ifdef DEBUG
 cout << "Connect...\n";
 #endif
-    int cn = 10; // попытки
+    int cn = 14; // попытки
     do{
         if(trt) delete trt;
         trt = new TransPort(cfg->getHost(), cfg->getPort(), cfg->getTimeAut() );
@@ -72,15 +68,12 @@ cout << "MaxDev: " << maxdev << endl;
     if(!dd) throw (string)"Serv >> Memory - failed";
 //-------------------------------------
 
-
-
 // Инициализируем виртуальные устройства
 #ifdef DEBUG
 cout << "Init Device...\n";
 #endif
-//    curdev = 0;   dd[curdev] = new Device( cfg, trt );      //          !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     for(curdev = 0;cfg->Next(); curdev++){
-         dd[curdev] = new Device( cfg, trt );
+         dd[curdev] = new Device(cfg);
 #ifdef DEBUG
 cout << dd[curdev]->getMsg() << endl;
 #endif
@@ -118,7 +111,7 @@ cout << "New" << endl;
 #endif
         int rez = 0;
         for( curdev = 0; curdev < maxdev; curdev++){
-            rez = dd[curdev]->Refresh(0);
+            rez = dd[curdev]->Refresh(0, trt);
 //cout << endl << "MainDevRefreshRez: " << rez << endl;
 //-------------------------------------
 //            if((rez == E_RCV)||(rez == E_SND)){// Через 10 минут Повторное Подключение
@@ -163,6 +156,7 @@ cout << "OK." << endl;
 #ifdef DEBUG
 cout << "End. Ждем: " << (cfg->getTCicle() / 1000 )<< " сек.\n";
 #endif
+//    sleep(cfg->getTCicle()); //  ждем в секундах
     usleep( cfg->getTCicle() * 1000); // ждем милисекундах
     }// while
 }// End Run

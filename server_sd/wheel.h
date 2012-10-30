@@ -10,11 +10,11 @@
 #ifndef Serv_class
 #define Serv_class
 
+#include <string>
+#include <iostream>
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <string>
-#include <iostream>
 //  --
 #include "daemon.h"
 #include "defs.h"

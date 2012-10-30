@@ -31,16 +31,16 @@ class Device : Driver{	// виртуальная копия устройства
     time_t time_refresh;// время обновления данных
     int    *idata;	// массив данных в формате b, i, или f *100
     int    idiap;	// диапазон
-    float  fmodif;	// модификатор
+    float  fmodif;	// модификотор
     int    pause;
     int    count;	// подсчет циклов обновления
 //  --
     string driv;
 //  --
 public:
-    Device(Config *cfg, TransPort *tr);
+    Device(Config *cfg);
     ~Device();
-    int Refresh(int);		// Обновление данных(эапрос-ответ), возвращяет код ошибки
+    int Refresh(int c, TransPort *tr);	// Обновление данных(эапрос-ответ), возвращяет код ошибки
     string getMsg(void){return msg;};
 //  --
     int getID(void){return id;};	// возвращает идентификатор устройства
@@ -50,7 +50,7 @@ public:
     int getTime(void){ return (int)time_refresh;};// возвращает unix-время обновления
 //  --
     int getDiap(int rg = 0){return idiap;};	// возвращает предел изменений данных
-    float getModif(int rg = 0){return fmodif;};	// возвращает модификатор данных
+    float getModif(int rg = 0){return fmodif;};	// возвращает предел изменений данных
 //  --
 //protected:
 private:

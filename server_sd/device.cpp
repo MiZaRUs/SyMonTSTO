@@ -20,7 +20,7 @@
 //  --
 //#define DEBUG
 //  -------------------------------------------------------------------------
-Device::Device(Config *cfg, TransPort *transp) : Driver(cfg->getDriver(), transp){
+Device::Device(Config *cfg) : Driver(cfg->getDriver()){
     driv = cfg->getDriver();
     id   = cfg->DeviceId();
     adr  = cfg->DeviceAdr();
@@ -58,6 +58,7 @@ Device::Device(Config *cfg, TransPort *transp) : Driver(cfg->getDriver(), transp
         msg.append(" -Y");
         creg = 13;
         idiap = 100;
+        fmodif = 0;
         refresh = &Device::refreshUBZ_301_BO;
     }
 //  --
@@ -65,7 +66,7 @@ Device::Device(Config *cfg, TransPort *transp) : Driver(cfg->getDriver(), transp
         msg.append(" -Y");
         creg = 1;
         idiap = 50;
-        fmodif = 50;
+        fmodif = 1;
         refresh = &Device::refreshPLC160_AI;
     }
 //----------------------------------------------------
@@ -79,8 +80,9 @@ Device::Device(Config *cfg, TransPort *transp) : Driver(cfg->getDriver(), transp
 /*************************************************************/
 //              Обновление данных
 //  -------------------------------------------------------------------------
-int Device::Refresh(int i){
-    int rez = (*this.*refresh)(i);
+int Device::Refresh(int cmd, TransPort *tr){
+    trp = tr;
+    int rez = (*this.*refresh)(cmd);
     time_refresh = time(&time_refresh);
     usleep( pause * 1000); // ждем
 return rez;

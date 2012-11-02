@@ -103,7 +103,11 @@ int Device::refreshTM5132(int i){                   // ELEMER TM5132
     if(Request( adr, fr, len )) Response(adr);
 //printf("RezultRefreshOwen: %d\n", err);
 //  --
-    for( int i = 0; i < creg; i++) idata[i] = getDanTM5132(i);
+    if(err){
+        setErrData(err);
+    }else{
+        for( int i = 0; i < creg; i++) idata[i] = getDanTM5132(i);
+    }
     return err;
 } // End
 //  -------------------------------------------------------------------------
@@ -175,6 +179,10 @@ int Device::refreshUBZ_301_BO(int i){ //BO_01_MB_RTU - блок обмена О�
     if(Request( adr, cmd, cmd_len )) Response(adr);
 //printf("RezultRefreshOwen: %d\n", err);
 //  --
+    if(err){
+        setErrData(err);
+        return err;
+    }
 #ifdef DEBUG
 cout << "CMD_HEX:"; for(int i=0; i < cmd_len; i++) printf(" %2x", cmd[i]);
 #endif
@@ -240,6 +248,7 @@ int Device::getDanTM5132(int poz){
 
     j = 0;
     for(;((buf[i] >= '0' )&&(buf[i] <= '9')) || (buf[i] == '.') || (buf[i] == '$') || (buf[i] == '-'); i++, j++){
+        if( i >= buf_len )return E_DN;
         st[j] = buf[i];
 //cout << st << " ";
     }

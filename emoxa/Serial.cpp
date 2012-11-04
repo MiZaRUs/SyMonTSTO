@@ -8,6 +8,7 @@
  *  (at your option) any later version.                                   *
  **************************************************************************/
 #include <iostream>
+#include <unistd.h>
 //  --
 #include "Serial.h"
 //  --

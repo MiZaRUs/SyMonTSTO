@@ -7,16 +7,15 @@
  *  the Free Software Foundation; version 2 of the License, or            *
  *  (at your option) any later version.                                   *
  **************************************************************************/
-#include <iostream>
 #include <netinet/in.h>
 #include <string.h>
 #include <stdio.h>
-#include <unistd.h>
+#include <iostream>
+//#include <string>
 //  --
 #include "transport.h"
 //  --
 #define DEBUG
-//  --
 /**************************************************************************/
 TransPort::TransPort(string host, int port, int timeaut){
     msg = "TransPort: ";

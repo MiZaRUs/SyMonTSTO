@@ -47,6 +47,7 @@ public:
 //    string getDBAddr(void){ return dbadr;};	// URL базы данных
 //    string getDBName(void){ return dbname;};	// имя базы данных
 //    string getDBDriv(void){ return dbdriv;};	// драйвер базы данных
+//    string getTblDevice(void){ return tbl_dev;};
     string getTblData(void){ return tbl_dat;};
     string getTblArch(void){ return tbl_arc;};
 //  --

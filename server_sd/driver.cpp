@@ -64,7 +64,7 @@ Driver::Driver(string name){
 //  ----------------------------------------------------------
 /************************************************************/
 bool Driver::Request(unsigned char adr, unsigned char *data, int len){
-    if(trp == NULL) return false;
+    if( trp == NULL ) return false;
     err = 0; 
     buf_len = 0;
     memset(buf, 0, sizeof(buf));
@@ -79,7 +79,7 @@ bool Driver::Request(unsigned char adr, unsigned char *data, int len){
 }
 //  ----------------------------------------------------------
 bool Driver::Response(unsigned char adr){
-    if(trp == NULL) return false;
+    if( trp == NULL ) return false;
     err = E_TR_RCV ;
     buf_len = 0;
     memset(buf, 0, sizeof(buf));
@@ -193,9 +193,9 @@ return trp->Write(data, buf_len);
 //  -------------------------------------------------------------------------
 int Driver::unpakELEMER(unsigned char adr){	// распаковка ELEMER
     unsigned char *ptr = buf;
-    ptr++;	// !!!!!!!!!!!!!!!!!!!!!!!!!
+    if((ptr[0] != '!')||(ptr[0] != ':')) ptr++;	// !!!!!!!!!!!!!!!!!!!!!!!!!
 //  --
-    if((buf_len < 9) || (buf_len >= MAXBUF)) return E_DN;
+    if((buf_len < 7) || (buf_len >= MAXBUF)) return E_DN;
     int i;
     for(i = buf_len-1;(ptr[i] != ';') && (i > 3);i--){};
     if (i < 4) return E_DN;

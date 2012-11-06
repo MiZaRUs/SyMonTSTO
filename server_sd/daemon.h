@@ -15,7 +15,7 @@
 #include <string>
 using namespace std;
 //----------------------------------------------------------------
-static string pidpath = "/var/run/";
+static string pidputh = "/var/run/";
 //----------------------------------------------------------------
 class Daemon{
 public:

@@ -14,10 +14,10 @@
 #include <syslog.h>
 //  --
 #include "wheel.h"
+#include "defs.h"
 
 #define DEBUG
 
-#define MAXNAME 31
 static Wheel *serv;
 #ifndef DEBUG
 static void clean_exit(int sig);
@@ -31,10 +31,13 @@ int main(int argc, char *argv[]){
 try{
     if(d_name.length() > MAXNAME) throw (string)"Main:d_name.length()!";
 
-//    serv = new Wheel("serv_tm"); // (perent Daemon)
-//    serv->Command("start");
+#ifdef DEBUG
+    serv = new Wheel("s_vds5_tm"); // (perent Daemon)
+    serv->Command("start");
+#else
     serv = new Wheel(d_name); // (perent Daemon)
     serv->Command((argc > 1) ? argv[1] : "");
+#endif
 
 /* Инициализация основных объектов */
     serv->Init();
@@ -61,6 +64,7 @@ try{
 cout << "FATAL_ERROR " << e << endl << "Exit." << endl;
 #endif
     syslog(LOG_LOCAL0|LOG_INFO|LOG_ERR, "FATAL_ERROR: %s", e.c_str());
+//    syslog(LOG_LOCAL0|LOG_ERR, "FATAL_ERROR: %s", e);
     closelog();
     }
 return EXIT_FAILURE;

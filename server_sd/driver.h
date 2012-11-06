@@ -18,6 +18,7 @@
 using namespace std;
 //----------------------------------------------------------------
 class Driver{
+//  --
 public:
     Driver(string drv);// "OWEN"|"ELEMER"|"DCON"|"MODBUS_RTU"|"MODBUS_ASCII"
     ~Driver();

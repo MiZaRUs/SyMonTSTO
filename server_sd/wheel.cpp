@@ -7,14 +7,20 @@
  *  the Free Software Foundation; version 2 of the License, or            *
  *  (at your option) any later version.                                   *
  **************************************************************************/
+#include <syslog.h>
 #include <string.h>
 #include <signal.h>
+#include <iostream>
+//#include <fcntl.h>
+//#include <stdio.h>
 #include <errno.h>
-#include <syslog.h>
 //  --
 #include "wheel.h"
+#include "device.h"
+#include "config.h"
+#include "dbwriter.h"
 //  --
-//#define DEBUG
+#define DEBUG
 //  ---------------------------------
 using namespace std;
 //  -------------------------------------------------------------------------
@@ -43,7 +49,7 @@ void Wheel::Init(void){
 #ifdef DEBUG
 cout << "Connect...\n";
 #endif
-    int cn = 14; // попытки
+    int cn = 10; // попытки
     do{
         if(trt) delete trt;
         trt = new TransPort(cfg->getHost(), cfg->getPort(), cfg->getTimeAut() );
@@ -68,10 +74,13 @@ cout << "MaxDev: " << maxdev << endl;
     if(!dd) throw (string)"Serv >> Memory - failed";
 //-------------------------------------
 
+
+
 // Инициализируем виртуальные устройства
 #ifdef DEBUG
 cout << "Init Device...\n";
 #endif
+//    curdev = 0;   dd[curdev] = new Device( cfg, trt );      //          !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     for(curdev = 0;cfg->Next(); curdev++){
          dd[curdev] = new Device(cfg);
 #ifdef DEBUG
@@ -104,14 +113,14 @@ cout << "\n\tWheel::Run()\n\n";
 #endif
     syslog(LOG_LOCAL0|LOG_INFO, "Run.");
 
-//    int timclear = 3600 * 27;
+//  --
     while(pid){
 #ifdef DEBUG
 cout << "New" << endl;
 #endif
         int rez = 0;
         for( curdev = 0; curdev < maxdev; curdev++){
-            rez = dd[curdev]->Refresh(0, trt);
+            rez = dd[curdev]->Refresh(0,trt);
 //cout << endl << "MainDevRefreshRez: " << rez << endl;
 //-------------------------------------
 //            if((rez == E_RCV)||(rez == E_SND)){// Через 10 минут Повторное Подключение
@@ -129,7 +138,10 @@ cout << "ReConnect..." << endl;
 #ifdef DEBUG
 cout << "WARNING - " << cn << " : " << mess << " - " << endl;
 #endif
-                    syslog(LOG_LOCAL0|LOG_INFO, "WARNING: Reconnect: %s", mess.c_str());
+                    if(cn > 19993)syslog(LOG_LOCAL0|LOG_INFO, "Reconnect: %s", mess.c_str());
+                    if((cn % 6)&&(cn > 19970))syslog(LOG_LOCAL0|LOG_INFO, "WARNING: Reconnect: %s", mess.c_str());
+                    if((cn % 30)&&(cn < 19971))syslog(LOG_LOCAL0|LOG_INFO, "ERROR !!! Reconnect: %s", mess.c_str());
+//                    syslog(LOG_LOCAL0|LOG_INFO, "WARNING: Reconnect: %s", mess.c_str());
                     sleep(10);
                     if(!--cn) throw (string)mess;
                 } while(trt->status() < 1);
@@ -145,18 +157,9 @@ cout << "OK." << endl;
 //-------------------------------------
         } // for
 //-------------------------------------
-//	if(timclear >= (3600 * 24)){
-//            if(!dbwr->oldClear()){
-//cout << "Error." << dbwr->getMsg() << endl;
-//                syslog(LOG_LOCAL0|LOG_ERR, "ERROR: %s", dbwr->getMsg().c_str());
-//            }
-//	timclear = 0;
-//	}// if timclear
-//    timclear++;
 #ifdef DEBUG
 cout << "End. Ждем: " << (cfg->getTCicle() / 1000 )<< " сек.\n";
 #endif
-//    sleep(cfg->getTCicle()); //  ждем в секундах
     usleep( cfg->getTCicle() * 1000); // ждем милисекундах
     }// while
 }// End Run

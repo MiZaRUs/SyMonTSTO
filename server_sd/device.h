@@ -40,7 +40,7 @@ class Device : Driver{	// виртуальная копия устройства
 public:
     Device(Config *cfg);
     ~Device();
-    int Refresh(int c, TransPort *tr);	// Обновление данных(эапрос-ответ), возвращяет код ошибки
+    int Refresh(int c, TransPort *t);	// Обновление данных(эапрос-ответ), возвращяет код ошибки
     string getMsg(void){return msg;};
 //  --
     int getID(void){return id;};	// возвращает идентификатор устройства

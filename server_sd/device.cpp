@@ -80,9 +80,9 @@ Device::Device(Config *cfg) : Driver(cfg->getDriver()){
 /*************************************************************/
 //              Обновление данных
 //  -------------------------------------------------------------------------
-int Device::Refresh(int cmd, TransPort *tr){
+int Device::Refresh(int i, TransPort *tr){
     trp = tr;
-    int rez = (*this.*refresh)(cmd);
+    int rez = (*this.*refresh)(i);
     time_refresh = time(&time_refresh);
     usleep( pause * 1000); // ждем
 return rez;
@@ -142,7 +142,7 @@ int Device::refreshMB110_16D(int i){ //MB110_16D
         return err;
     }
     if(buf_len != 0x2){
-        err = E_DN;   // Количество данных !!!!!!
+        err = E_DEV_DN;   // Количество данных !!!!!!
         setErrData(err);
         return err;
     }
@@ -178,11 +178,11 @@ int Device::refreshUBZ_301_BO(int i){ //BO_01_MB_RTU - блок обмена О�
 //  --
     if(Request( adr, cmd, cmd_len )) Response(adr);
 //printf("RezultRefreshOwen: %d\n", err);
-//  --
     if(err){
         setErrData(err);
         return err;
     }
+//  --
 #ifdef DEBUG
 cout << "CMD_HEX:"; for(int i=0; i < cmd_len; i++) printf(" %2x", cmd[i]);
 #endif
@@ -232,29 +232,29 @@ printf("DeviceOwenD: %d\n", x);
 //              Вспомогательные функции
 //  -------------------------------------------------------------------------
 int Device::getDanTM5132(int poz){
-    int xss = E_DN;
-    char st[7];
+    int xss = E_DEV_PR;	// 21
+    char st[10];
     st[0] = 'x';
     st[1] = '\0';
 
-    int i, j;
-    for(i = 0, j = 0; i <= buf_len; i++){
+    int i = 0, j = 0;
+    for(; i <= buf_len; i++){
         if(buf[i]==';') j++;
         if(j == poz)break;
     }
     i++;
     if(poz == 0) i =0;
-    if( i >= buf_len )return E_DN;
+    if( i >= buf_len )return E_DEV_DN;	//20
 
     j = 0;
     for(;((buf[i] >= '0' )&&(buf[i] <= '9')) || (buf[i] == '.') || (buf[i] == '$') || (buf[i] == '-'); i++, j++){
-        if( i >= buf_len )return E_DN;
+        if( i >= buf_len )break;
         st[j] = buf[i];
 //cout << st << " ";
     }
     st[j] = '\0';
 //cout << "  " << st << endl;
-    if((st[0] >= '0')&&((st[0] <= '9')||(st[0] == '-' ))) xss = (int)(atof(st) * 100);
+    if((st[0] == '-' )||(st[0] >= '0')&&((st[0] <= '9'))) xss = (int)(atof(st) * 100);
     if(st[0] == '$'){
         if(st[1] == '0')xss = E_ZER; //неисправен 
         if(st[1] == '1')xss = E_KZ; 

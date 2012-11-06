@@ -39,8 +39,8 @@ private:
 // Корректное закрытие для деструктора
     void Close(void);
 
-// проверка удалённого сетевого преобразователя
-//int initMoxaNPort(int);
+// проверка связи с удалённым сетевым преобразователем
+int initMoxaNPort(int);
 
 // Инициализация транспортного уровня:  возвращает файловый дескриптор (int msec - таймаут)
     int openSocket(string host, int port, int msec);

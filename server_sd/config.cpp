@@ -12,7 +12,9 @@
 //  --
 #include "config.h"
 //  --
-#define DEBUG
+//#define DEBUG
+//  -------------------------------------------------------------------------
+//using namespace std;
 //  -------------------------------------------------------------------------
 Config::Config(string sname){
     msg = "Config";
@@ -43,8 +45,8 @@ Config::Config(string sname){
     maxdev = 1;
 // End For Device
 // --
-    tbl_dat = "data_xx";
-    tbl_arc = "arch_xx";
+    tbl_dat = "xdata";
+    tbl_arc = "xarch";
 //  --
 //  Загрузка параметров сети
    if(!loadNetConf()) throw (string)msg;
@@ -61,8 +63,8 @@ bool Config::loadNetConf(void){
         msg.append(mysql_error(&mysql));
         return false;
     }
-//  --                  0      1      2       3      4       5      6       7
-    string qu = "SELECT names,devnet,tcpport,tcicle,timeaut,tpause,tbldata,tblarch FROM ";
+//  --                                0        1        2         3       4          5          6        7        8
+    string qu = "SELECT names,host,tcpport,tcicle,timeaut,tpause,tbldata,tblarch FROM ";
     qu.append(TBLCNF);
     qu.append(" WHERE tcpport > 0 AND names = '");
     qu.append(nameserv);
@@ -123,7 +125,7 @@ cout << "DevWheel::readConf()\n";
         msg.append(mysql_error(&mysql));
         return false;
     }
-//  --                  0    1    2       3     4    5      6
+//  --                              0   1     2        3        4     5         6
     string qu = "SELECT id, adr, driver, name, reg, param, format FROM ";
     qu.append(TBLDEV);
     qu.append(" WHERE adr > 0 AND reg > 0 AND sname = '");

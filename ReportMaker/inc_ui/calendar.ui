@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>wxCalendar</class>
+ <widget class="QWidget" name="wxCalendar">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>190</width>
+    <height>280</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>190</width>
+    <height>280</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>190</width>
+    <height>280</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QCalendarWidget" name="calendar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>187</width>
+     <height>136</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QDateEdit" name="dateEdit">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>140</y>
+     <width>101</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="dateTime">
+    <datetime>
+     <hour>0</hour>
+     <minute>0</minute>
+     <second>0</second>
+     <year>2012</year>
+     <month>1</month>
+     <day>1</day>
+    </datetime>
+   </property>
+   <property name="date">
+    <date>
+     <year>2012</year>
+     <month>1</month>
+     <day>1</day>
+    </date>
+   </property>
+   <property name="minimumDate">
+    <date>
+     <year>2011</year>
+     <month>1</month>
+     <day>1</day>
+    </date>
+   </property>
+   <property name="displayFormat">
+    <string>dd-MM-yyyy</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>190</y>
+     <width>111</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Выберите время </string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>210</y>
+     <width>111</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>начала периода</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>240</y>
+     <width>141</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>и продолжительность</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="boxTimeN">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>210</y>
+     <width>51</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="boxTimeK">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>240</y>
+     <width>51</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>dateEdit</sender>
+   <signal>dateChanged(QDate)</signal>
+   <receiver>calendar</receiver>
+   <slot>setSelectedDate(QDate)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>95</x>
+     <y>147</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>100</x>
+     <y>120</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>calendar</sender>
+   <signal>activated(QDate)</signal>
+   <receiver>dateEdit</receiver>
+   <slot>setDate(QDate)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>61</x>
+     <y>114</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>67</x>
+     <y>150</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

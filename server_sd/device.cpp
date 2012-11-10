@@ -254,7 +254,7 @@ int Device::getDanTM5132(int poz){
     }
     st[j] = '\0';
 //cout << "  " << st << endl;
-    if((st[0] == '-' )||(st[0] >= '0')&&((st[0] <= '9'))) xss = (int)(atof(st) * 100);
+    if((st[0] == '-' )||((st[0] >= '0')&&(st[0] <= '9'))) xss = (int)(atof(st) * 100);
     if(st[0] == '$'){
         if(st[1] == '0')xss = E_ZER; //неисправен 
         if(st[1] == '1')xss = E_KZ; 

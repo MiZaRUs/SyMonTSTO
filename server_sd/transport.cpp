@@ -10,6 +10,7 @@
 #include <netinet/in.h>
 #include <string.h>
 #include <stdio.h>
+#include <unistd.h>
 #include <iostream>
 //#include <string>
 //  --

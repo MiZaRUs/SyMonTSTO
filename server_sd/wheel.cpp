@@ -49,7 +49,7 @@ void Wheel::Init(void){
 #ifdef DEBUG
 cout << "Connect...\n";
 #endif
-    int cn = 10; // попытки
+    int cn = 20; // попытки
     do{
         if(trt) delete trt;
         trt = new TransPort(cfg->getHost(), cfg->getPort(), cfg->getTimeAut() );
@@ -58,7 +58,7 @@ cout << "Connect...\n";
 cout << "WARNING - " << cn << " : " << trt->getMsg();
 #endif
         syslog(LOG_LOCAL0|LOG_INFO, "WARNING: Init: %s", trt->getMsg().c_str());
-        sleep(2);
+        sleep(1);
         if(!--cn) throw (string)trt->getMsg();
     } while(trt->status() < 1);
 //-------------------------------------
@@ -123,12 +123,12 @@ cout << "New" << endl;
             rez = dd[curdev]->Refresh(0,trt);
 //cout << endl << "MainDevRefreshRez: " << rez << endl;
 //-------------------------------------
-//            if((rez == E_RCV)||(rez == E_SND)){// Через 10 минут Повторное Подключение
-            if(rez == E_SOCKET){// Повторное Подключение
+            if((rez <= E_SOCKET)&&(rez > E_TR_XX)){// Повторное Подключение( с E1 по E2 )-
+//          - с учетом отрицательных значений ошибки и ранга в defs.h
 #ifdef DEBUG
 cout << "ReConnect..." << endl;
 #endif
-                int cn = 20000; // попытки
+                int cn = 90000; // попытки (сутки)
                 do{
                     if(trt) delete trt;
                     trt = new TransPort(cfg->getHost(), cfg->getPort(), cfg->getTimeAut());
@@ -138,11 +138,12 @@ cout << "ReConnect..." << endl;
 #ifdef DEBUG
 cout << "WARNING - " << cn << " : " << mess << " - " << endl;
 #endif
-                    if(cn > 19993)syslog(LOG_LOCAL0|LOG_INFO, "Reconnect: %s", mess.c_str());
-                    if((cn % 6)&&(cn > 19970))syslog(LOG_LOCAL0|LOG_INFO, "WARNING: Reconnect: %s", mess.c_str());
-                    if((cn % 30)&&(cn < 19971))syslog(LOG_LOCAL0|LOG_INFO, "ERROR !!! Reconnect: %s", mess.c_str());
+                    if(cn > 89997)syslog(LOG_LOCAL0|LOG_INFO, "Tr=%d. Reconnect: %s", rez, mess.c_str());
+                    if((!(cn % 20))&&(cn < 89000)&&(cn > 89997))syslog(LOG_LOCAL0|LOG_INFO, "WARNING: Reconnect: %s", mess.c_str());
+                    if((!(cn % 200))&&(cn > 89000))syslog(LOG_LOCAL0|LOG_INFO, "ERROR !!! Reconnect: %s", mess.c_str());
 //                    syslog(LOG_LOCAL0|LOG_INFO, "WARNING: Reconnect: %s", mess.c_str());
-                    sleep(10);
+                    sleep(1);
+                    if(trt->status() > 0) break;
                     if(!--cn) throw (string)mess;
                 } while(trt->status() < 1);
 #ifdef DEBUG
@@ -160,6 +161,7 @@ cout << "OK." << endl;
 #ifdef DEBUG
 cout << "End. Ждем: " << (cfg->getTCicle() / 1000 )<< " сек.\n";
 #endif
+//    sleep(cfg->getTCicle()); //  ждем в секундах
     usleep( cfg->getTCicle() * 1000); // ждем милисекундах
     }// while
 }// End Run

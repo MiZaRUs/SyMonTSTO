@@ -346,8 +346,8 @@ int Driver::unpakMB_ASC_B(unsigned char adr){	// распаковка MB_ASC
 //  --
     int i;
     for(i = 0; i < frame[4]; i++){
-        buf[i] = frame[i + 4];
-//printf("Buf %x", buf[i]);
+        buf[i] = frame[i + 5];
+printf("Buf %x", buf[i]);
     }
 //cout << endl;
     buf[i] = 0;

@@ -125,6 +125,7 @@ int Device::refreshNORD_Z3M(int i){ //НОРД-З3М
         x = (x << 8) | buf[2];
         x = (x << 8) | buf[3];
         idata[0] = x;
+printf("Rezult: %x hex.\n", x);
 //  --
 //        x = buf[4];
 //        x = (x << 8) | buf[5];

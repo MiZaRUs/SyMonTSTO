@@ -41,7 +41,7 @@ bool DBWriter::Write(Device *d){
 #ifdef DEBUG
 //-------------------------------------
 cout << "DBWriter-Write: adr ";
-cout << d->getAdr() << " regs: \t";
+cout << d->getAdr() << "  regs: ";
             char str[16];
             for(int qq = 0; qq < d->getCount();  qq++){
                 sprintf(str,"%d",d->getData(qq));

@@ -40,7 +40,7 @@ Device::Device(Config *cfg) : Driver(cfg->getDriver()){
 // зависит от устройства
     if(name == "NORD_Z3M"){
         msg.append(" -Y");
-        creg = 2;
+        creg = 1;
         idiap = 1;
         fmodif = 1;
         refresh = &Device::refreshNORD_Z3M;
@@ -126,12 +126,12 @@ int Device::refreshNORD_Z3M(int i){ //НОРД-З3М
         x = (x << 8) | buf[3];
         idata[0] = x;
 //  --
-        x = buf[4];
-        x = (x << 8) | buf[5];
-        x = (x << 8) | buf[6];
-        x = (x << 8) | buf[7];
-        idata[1] = x;
-printf("Rezult-1: %x hex,  Rezult-2: %x hex.\n", idata[0],idata[1]);
+//        x = buf[4];
+//        x = (x << 8) | buf[5];
+//        x = (x << 8) | buf[6];
+//        x = (x << 8) | buf[7];
+//        idata[1] = x;
+//printf("Rezult-1: %x hex,  Rezult-2: %x hex.\n", idata[0],idata[1]);
     }
     return err;
 } // End

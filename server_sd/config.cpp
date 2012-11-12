@@ -28,6 +28,7 @@ Config::Config(string sname){
 // For TransPort
  // IP-адрес
     host  = "127.0.0.1";     // localhost | 192.168.0.10 | 192.168.2.22	VARCHAR(32)
+//    host  = "192.168.0.10";
 // TCP-порт
     tcpport = 4001;		// Если = 0 то EXIT иначе SOCKET ( 950 )
 
@@ -47,7 +48,7 @@ Config::Config(string sname){
     param = "";		// параметры устройства
     format = "";		// формат данных
 //  --
-    reg = 4;
+    reg = 1;
     maxdev = 1;
 // End For Device
 // --

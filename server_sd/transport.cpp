@@ -16,7 +16,7 @@
 //  --
 #include "transport.h"
 //  --
-#define DEBUG
+//#define DEBUG
 /**************************************************************************/
 TransPort::TransPort(string host, int port, int timeaut){
     msg = "TransPort: ";

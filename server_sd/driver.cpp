@@ -326,7 +326,7 @@ int Driver::unpakMB_ASC_B(unsigned char adr){	// распаковка MB_ASC
 //cout << endl << "проверка корректности ответа" << endl;
     if((buf_len < 11) || (buf_len >= MAXBUF)) return E_DN;
 //cout << "прверить начало ':' и конец '0xD' 'oxA' в buf_r" << endl;
-    if(( buf[0] != 0x3A ) || (buf[buf_len-1] != 0xA ) || (buf[buf_len-2] != 0xD ))return E_DN;
+    if(( buf[0] != 0x3A ) || (buf[buf_len-1] != 0xA ))return E_DN;
 //cout << "Пакет - ОК.\n";
     buf_len = (buf_len - 3) / 2;
 //cout << "Count: " << buf_len << endl;
@@ -340,13 +340,12 @@ int Driver::unpakMB_ASC_B(unsigned char adr){	// распаковка MB_ASC
 //  --
 //printf("КS %x\n", frame[buf_len-1]);
 //printf("КSx %x\n", ksumLRC(frame, buf_len-1));
-//    if( frame[buf_len-1] != ksumLRC(frame, buf_len-1)) return E_KS; // ошибка KS
-//printf("Fr1 %x\n",frame[1] );
+    if( frame[buf_len-1] != ksumLRC(frame, buf_len-1)) return E_KS; // ошибка KS
     if(frame[1] != 0X1D) return E_DN;
-    if((frame[3] < 1) || (frame[2] > MAXBUF)) return E_DN;   // Количество данных !!!!!!
+    if((frame[4] < 1) || (frame[4] > MAXBUF)) return E_DN;   // Количество данных !!!!!!
 //  --
     int i;
-    for(i = 0; i < frame[3]; i++){
+    for(i = 0; i < frame[4]; i++){
         buf[i] = frame[i + 4];
 //printf("Buf %x", buf[i]);
     }

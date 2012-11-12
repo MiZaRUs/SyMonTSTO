@@ -38,6 +38,13 @@ Device::Device(Config *cfg) : Driver(cfg->getDriver()){
     msg.append(name);
 
 // зависит от устройства
+    if(name == "NORD_Z3M"){
+        msg.append(" -Y");
+        creg = 2;
+        idiap = 1;
+        fmodif = 1;
+        refresh = &Device::refreshNORD_Z3M;
+    }
     if(name == "TM5132"){
         msg.append(" -Y");
         creg = 4;
@@ -95,6 +102,40 @@ int Device::refreshXXX(int i){
 #endif
 return 0;
 }// End refreshXXX
+//  -------------------------------------------------------------------------
+int Device::refreshNORD_Z3M(int i){ //НОРД-З3М
+    unsigned char cmd[20];
+//  --
+    cmd[0] = 0x1D;	//Func
+    cmd[1] = 0x24;	// hi reg;
+    cmd[2] = 0x00;	// lo reg
+    cmd[3] = 4;         // lo;
+    int cmd_len = 4;
+//  --
+    if(Request( adr, cmd, cmd_len )) Response(adr);
+//printf("RezultRefreshOwen: %d\n", err);
+//  --
+    if(err){
+        setErrData(err);
+        return err;
+    }else{
+        unsigned int x;
+        x = buf[0];
+        x = (x << 8) | buf[1];
+        x = (x << 8) | buf[2];
+        x = (x << 8) | buf[3];
+        idata[0] = x;
+//  --
+        x = buf[4];
+        x = (x << 8) | buf[5];
+        x = (x << 8) | buf[6];
+        x = (x << 8) | buf[7];
+        idata[1] = x;
+printf("Rezult-1: %x hex,  Rezult-2: %x hex.\n", idata[0],idata[1]);
+    }
+    return err;
+} // End
+//  -------------------------------------------------------------------------
 //  -------------------------------------------------------------------------
 int Device::refreshTM5132(int i){                   // ELEMER TM5132
     unsigned char fr[7];

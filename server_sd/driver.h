@@ -43,6 +43,7 @@ private:
     int unpakOWEN(unsigned char adr);
     int unpakMB_RTU(unsigned char adr);
     int unpakMB_ASC(unsigned char adr);
+    int unpakMB_ASC_B(unsigned char adr);	// ModBus-ascii-bozna
     int unpakXXX(unsigned char adr);	//пустышка
 //  --
 protected:

@@ -57,6 +57,7 @@ private:
     int (Device::*refresh)(int i);        // обновление
 //  ------------------------------------------------------------------------
     int refreshXXX(int i);
+    int refreshNORD_Z3M(int i); // блок электронный НОРД-Э3М
     int refreshTM5132(int i); // ELEMER
     int refreshMB110_16D(int i);
     int refreshUBZ_301_BO(int i); // блок обмена БО-01 для УБЗ-301 (универс.блок защиты)

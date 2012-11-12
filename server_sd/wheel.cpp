@@ -37,7 +37,7 @@ cout << "\nWheel::Wheel(" << nameserv << ")           **************************
     cfg = new Config(nameserv); // при неудаче исключение FError(msg)
 
 #ifdef DEBUG
-cout << "Wheel >> NetConf: " << cfg->getHost() << "  PS: " << cfg->getPort() << "  TM: " << cfg->getTimeAut() << endl;
+cout << "Wheel >> NetConf: " << cfg->getHost() << "  Port: " << cfg->getPort() << "  TimeAut: " << cfg->getTimeAut() << endl;
 #endif
 }// End Wheel
 //**************************************************//
@@ -56,8 +56,9 @@ cout << "Connect...\n";
         if(trt->status() > 0) break;
 #ifdef DEBUG
 cout << "WARNING - " << cn << " : " << trt->getMsg();
-#endif
+#else
         syslog(LOG_LOCAL0|LOG_INFO, "WARNING: Init: %s", trt->getMsg().c_str());
+#endif
         sleep(1);
         if(!--cn) throw (string)trt->getMsg();
     } while(trt->status() < 1);
@@ -110,8 +111,9 @@ void Wheel::Run(void){// Цикл опроса
 #ifdef DEBUG
 cout << "\n\tWheel::Run()\n\n";
 //int pid = 7;	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-#endif
+#else
     syslog(LOG_LOCAL0|LOG_INFO, "Run.");
+#endif
 
 //  --
     while(pid){
@@ -137,11 +139,12 @@ cout << "ReConnect..." << endl;
 
 #ifdef DEBUG
 cout << "WARNING - " << cn << " : " << mess << " - " << endl;
-#endif
+#else
                     if(cn > 89997)syslog(LOG_LOCAL0|LOG_INFO, "Tr=%d. Reconnect: %s", rez, mess.c_str());
                     if((!(cn % 20))&&(cn < 89000)&&(cn > 89997))syslog(LOG_LOCAL0|LOG_INFO, "WARNING: Reconnect: %s", mess.c_str());
                     if((!(cn % 200))&&(cn > 89000))syslog(LOG_LOCAL0|LOG_INFO, "ERROR !!! Reconnect: %s", mess.c_str());
 //                    syslog(LOG_LOCAL0|LOG_INFO, "WARNING: Reconnect: %s", mess.c_str());
+#endif
                     sleep(1);
                     if(trt->status() > 0) break;
                     if(!--cn) throw (string)mess;
@@ -171,6 +174,8 @@ void Wheel::ErrLog(string st){
     syslog(LOG_LOCAL0|LOG_INFO,"ERROR: %s", st.c_str());
 #ifdef DEBUG
     cout << "ERROR: " << st.c_str() << endl;
+#else
+    syslog(LOG_LOCAL0|LOG_INFO,"ERROR: %s", st.c_str());
 #endif
 }
 /***************************************************************************/

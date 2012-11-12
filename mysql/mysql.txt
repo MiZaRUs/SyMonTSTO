@@ -1,3 +1,4 @@
+!!!! Возможны изменения
 USE server_sd;
 
 CREATE TABLE netconf ( names VARCHAR(24) NOT NULL, host VARCHAR(24) NOT NULL, tcpport INT NOT NULL, tcicle INT NOT NULL, timeaut INT NOT NULL, tpause INT NOT NULL, tbldata VARCHAR(24) NOT NULL, tblarch VARCHAR(24) NOT NULL, PRIMARY KEY (names)) CHARACTER SET utf8 COLLATE utf8_general_ci;

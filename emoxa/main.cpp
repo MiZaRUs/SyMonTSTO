@@ -17,7 +17,7 @@
 #include "ServerSocket.h"
 #include "Serial.h"
 
-//#define DEBUG
+#define DEBUG
 
 const int BUF_SIZE = 127;
 const int MAXBUF = 80;
@@ -47,7 +47,7 @@ int main(int argc, char *argv[]){
 
 /////////////////////////////////
     try{
-        Serial tty( "/dev/ttyS0");
+        Serial tty( "/dev/ttyS1");	//  !!!!!!!!!!!!!!!!!!!!!!!!!!!!
         ServerSocket server(4001);
 /////////////////////////////////
 syslog(LOG_LOCAL0|LOG_INFO,"Run!\n");
@@ -119,14 +119,23 @@ cout << "End RC." << endl;
         }// while((conn...
 
     }
-    catch( char *e ){
-        syslog(LOG_LOCAL0|LOG_ERR,"ERROR: %s\n", e);
+    catch( string e ){
+#ifdef DEBUG
+cout << "ERROR: " << e.c_str() << endl;
+#endif
+        syslog(LOG_LOCAL0|LOG_ERR,"ERROR: %s\n", e.c_str());
     }
     catch( ... ){
+#ifdef DEBUG
+cout << "FATAL_ERROR!" << endl;
+#endif
         syslog(LOG_LOCAL0|LOG_ERR,"FATAL_ERROR!");
     }
 //  --
     closelog();
+#ifdef DEBUG
+cout << "Exit." << endl;
+#endif
     exit(EXIT_FAILURE);
 return EXIT_FAILURE;
 }//**************************************************//

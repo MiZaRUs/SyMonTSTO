@@ -12,46 +12,56 @@
 //  --
 #include "config.h"
 //  --
+#define D_TEST
 //#define DEBUG
 //  -------------------------------------------------------------------------
+#ifdef D_TEST
+    int MD = 0;
+#endif
 //using namespace std;
 //  -------------------------------------------------------------------------
 Config::Config(string sname){
     msg = "Config";
     nameserv = sname;		// Уникальное имя сервиса	VARCHAR(32)
-    tcicle = 10000;		// задержка цикла в mсекундах, пауза между опросами
+    tcicle = 4000;		// задержка цикла в mсекундах, пауза между опросами
 
 // For TransPort
  // IP-адрес
-    host  = "localhost";     // localhost | 192.168.2.22	VARCHAR(32)
+    host  = "127.0.0.1";     // localhost | 192.168.0.10 | 192.168.2.22	VARCHAR(32)
 // TCP-порт
     tcpport = 4001;		// Если = 0 то EXIT иначе SOCKET ( 950 )
 
-// драйвер обмена ( "ELEMER" | "DCON" | "OWEN" | "MODBUS_RTU" | "MODBUS_ASCII" )
-    driver = "ELEMER";		//протокол обмена
+// драйвер обмена ( "ELEMER" | "DCON" | "OWEN" | "MB_RTU" | "MB_ASC" | "MB_ASC_B" )
+    driver = "MB_ASC_B";	//протокол обмена
+//    driver = "OWEN";	//протокол обмена
 
-    timeaut = 700;
-    tpause = 500;		// завершающая пауза в милисек
+    timeaut = 500;
+    tpause = 200;		// завершающая пауза в милисек
 
 
 // For Device
     id = 1;			// идентификатор
-    adr = 1;			// сетевой адресс
-//    name = "PLC160_AI";name = "MB110_16D";		// название устройства "TM5132" "MB110_16D" "UBZ_301_BO"
-    name = "TM5132";
+    adr = 3;			// сетевой адресс
+//    name = "PLC160_AI";		// название устройства "TM5132" "MB110_16D" "UBZ_301_BO" "NORD_Z3M"
+    name = "NORD_Z3M";
     param = "";		// параметры устройства
     format = "";		// формат данных
 //  --
+    reg = 4;
     maxdev = 1;
 // End For Device
 // --
-    tbl_dat = "xdata";
-    tbl_arc = "xarch";
+    tbl_dat = "data";
+    tbl_arc = "arch_x";
 //  --
+#ifndef D_TEST
 //  Загрузка параметров сети
    if(!loadNetConf()) throw (string)msg;
 // Загрузка параметров оборудования
    if(!loadDevConf()) throw (string)msg;
+#else
+    MD = maxdev;
+#endif
 }// End
 //  -------------------------------------------------------------------------
 // загрузка из локальной БД 
@@ -167,6 +177,11 @@ cout << ">>>  "<< num << "  <<<\n";
 }// End
 //  -------------------------------------------------------------------------
 bool Config::Next(void){
+#ifdef D_TEST
+    if(MD < 1)return false;
+    MD--;
+    return true;
+#endif
 if(maxdev < 1)return false;
     MYSQL_ROW row;
     if((row = mysql_fetch_row(res))){

@@ -40,12 +40,13 @@ bool DBWriter::Write(Device *d){
 
 #ifdef DEBUG
 //-------------------------------------
-cout << d->getAdr() << ":  ";
+cout << "DBWriter-Write: adr ";
+cout << d->getAdr() << " regs: \t";
             char str[16];
             for(int qq = 0; qq < d->getCount();  qq++){
                 sprintf(str,"%d",d->getData(qq));
 //        cout << (qq +1) << ". " << str << endl;
-                cout << (qq +1) << "=" << str << "; ";
+                cout << (qq +1) << " = " << str << ";\t ";
             }
 cout << endl;
 //-------------------------------------

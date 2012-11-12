@@ -32,7 +32,7 @@ try{
     if(d_name.length() > MAXNAME) throw (string)"Main:d_name.length()!";
 
 #ifdef DEBUG
-    serv = new Wheel("s_vds5_tm"); // (perent Daemon)
+    serv = new Wheel("serv_test"); // (perent Daemon)
     serv->Command("start");
 #else
     serv = new Wheel(d_name); // (perent Daemon)

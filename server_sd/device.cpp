@@ -221,11 +221,24 @@ int Device::refreshUBZ_301_BO(int i){ //BO_01_MB_RTU - блок обмена О�
     if(err){
         setErrData(err);
         return err;
-    }
+    }else{
+//  --
+//        unsigned int x = 0;
+//        x = buf[3];
+//        x = (x << 8) | buf[2];
+//        x = (x << 8) | buf[1];
+//        x = (x << 8) | buf[0];
+//        float *pfx = (float*)&x;
+//        float fx = *pfx;
+//        idata[0] = (int)(fx * 100);
+//  --
+printf("Rezult: %f dec.", fx);
+cout << "  или: " << fx << endl;
 //  --
 #ifdef DEBUG
 cout << "CMD_HEX:"; for(int i=0; i < cmd_len; i++) printf(" %2x", cmd[i]);
 #endif
+    }
 return 0;
 } // End
 //  -------------------------------------------------------------------------

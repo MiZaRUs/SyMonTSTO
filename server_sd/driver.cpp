@@ -307,9 +307,9 @@ int Driver::unpakMB_ASC(unsigned char adr){	// распаковка MODBUS_ASCII
 //printf("КS %x\n", frame[buf_len-1]);
 //printf("КSx %x\n", ksumLRC(frame, buf_len-1));
     if( frame[buf_len-1] != ksumLRC(frame, buf_len-1)) return E_KS; // ошибка KS
-printf("Fr1 %x\n",frame[1] );
+//printf("Fr1 %x\n",frame[1] );
     if((frame[1] == 0X83) || (frame[1] == 0X84)) return E_WNO;
-printf("Fr2 %x\n",frame[2] );
+//printf("Fr2 %x\n",frame[2] );
     if((frame[2] < 1) || (frame[2] > MAXBUF)) return E_DN;   // Количество данных !!!!!!
 //  --
     int i;

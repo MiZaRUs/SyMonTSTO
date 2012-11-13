@@ -104,7 +104,7 @@ return 0;
 }// End refreshXXX
 //  -------------------------------------------------------------------------
 int Device::refreshNORD_Z3M(int i){ //НОРД-З3М
-    unsigned char cmd[20];
+    unsigned char cmd[5];
 //  --
     cmd[0] = 0x1D;	//Func
     cmd[1] = 0x24;	// hi reg;
@@ -128,8 +128,10 @@ int Device::refreshNORD_Z3M(int i){ //НОРД-З3М
         float fx = *pfx;
         idata[0] = (int)(fx * 1000);
 //  --
+#ifdef DEBUG
 printf("Rezult: %f dec.", fx);
 cout << "  или: " << fx << endl;
+#endif
 //  --
     }
     return err;

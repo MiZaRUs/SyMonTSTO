@@ -48,7 +48,7 @@ cout << d->getAdr() << "  regs: ";
 //        cout << (qq +1) << ". " << str << endl;
                 cout << (qq +1) << " = " << str << ";\t ";
             }
-cout << endl;
+cout << "-Integer." << endl;
 //-------------------------------------
 #else
     if(!mysql_real_connect(&mysql_rw, BDHOST, "oleg", "", BDNAME, 0,NULL,0)){

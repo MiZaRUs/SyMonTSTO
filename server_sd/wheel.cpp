@@ -27,7 +27,7 @@ using namespace std;
 Wheel::Wheel(string nameserv) : Daemon(nameserv){
 //    string nameserv = "serv_s"; // Уникальное имя сервиса		VARCHAR(32)
 #ifdef DEBUG
-cout << "\nWheel::Wheel(" << nameserv << ")           *******************************************************************\n\n";
+cout << "\nWheel::Wheel(" << nameserv << ")  *********************************\n";
 #endif
     maxdev = 0;
     curdev = -1;
@@ -109,7 +109,7 @@ cout << dbwr->getMsg() << endl;
 /* Запуск */
 void Wheel::Run(void){// Цикл опроса
 #ifdef DEBUG
-cout << "\n\tWheel::Run()\n\n";
+cout << "\n\tWheel::Run()\n";
 //int pid = 7;	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 #else
     syslog(LOG_LOCAL0|LOG_INFO, "Run.");

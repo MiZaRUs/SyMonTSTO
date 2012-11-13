@@ -119,20 +119,18 @@ int Device::refreshNORD_Z3M(int i){ //НОРД-З3М
         setErrData(err);
         return err;
     }else{
-        unsigned int x;
-        x = buf[0];
-        x = (x << 8) | buf[1];
+        unsigned int x = 0;
+        x = buf[3];
         x = (x << 8) | buf[2];
-        x = (x << 8) | buf[3];
-        idata[0] = x;
-printf("Rezult: %x hex.\n", x);
+        x = (x << 8) | buf[1];
+        x = (x << 8) | buf[0];
+        float *pfx = (float*)&x;
+        float fx = *pfx;
+        idata[0] = (int)(fx * 1000);
 //  --
-//        x = buf[4];
-//        x = (x << 8) | buf[5];
-//        x = (x << 8) | buf[6];
-//        x = (x << 8) | buf[7];
-//        idata[1] = x;
-//printf("Rezult-1: %x hex,  Rezult-2: %x hex.\n", idata[0],idata[1]);
+printf("Rezult: %f dec.", fx);
+cout << "  или: " << fx << endl;
+//  --
     }
     return err;
 } // End

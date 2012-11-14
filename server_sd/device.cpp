@@ -139,21 +139,19 @@ cout << "DeviceOwenSZ = " << buf_len << "  " << endl;
 cout << "HEX:"; for(int i=0; i < cmd_len; i++) printf(" %2x", buf[i]);
 cout << endl;
 #endif
-        unsigned int x = buf[2];
+        unsigned int x = buf[0];
         x = (x << 8) | buf[1];
-        x = (x << 8) | buf[0];
-//        x = (x << 8) | 0;
+        x = (x << 8) | buf[2];
+        x = (x << 8) | 0;
         float *pfx = (float*)&x;
         float fx = *pfx;
         idata[0] = (int)(fx * 100);
 //  --
-    fx = (float)x;
 #ifdef DEBUG
-printf("Rezult: %d int.", x);
+printf("Rezult: %d int. %f", x, fx);
 cout << "  или: " << fx << endl;
 #endif
 //  --
-
     }
     return err;
 } // End

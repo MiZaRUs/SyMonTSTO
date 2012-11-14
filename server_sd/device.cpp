@@ -121,10 +121,10 @@ int Device::refreshTRM101(int i){ //ТРМ101
     int cmd_len = 0;
     if(driv == "OWEN"){
         cmd[0] = 0;		// внутренний адресс 4-бита
-        cmd[0] |= 0x10;		//признак запроса
+        cmd[0] |= 0x10;		// признак запроса
         cmd[0] |= 0;		// dataSize;
         cmd[1] = 0xB8;		// (hash >> 8) & 0xff;
-        cmd[2] = 0xDF;		//  hash & 0xff;
+        cmd[2] = 0xDF;		// hash & 0xff;
         cmd_len = 3; 
     }// end owen
 //  --
@@ -139,15 +139,15 @@ cout << "DeviceOwenSZ = " << buf_len << "  " << endl;
 cout << "HEX:"; for(int i=0; i < cmd_len; i++) printf(" %2x", buf[i]);
 cout << endl;
 #endif
-        unsigned int x = 0;
-        x = buf[0];
+        unsigned int x = buf[2];
         x = (x << 8) | buf[1];
-        x = (x << 8) | buf[2];
+        x = (x << 8) | buf[0];
 //        x = (x << 8) | 0;
         float *pfx = (float*)&x;
         float fx = *pfx;
         idata[0] = (int)(fx * 100);
 //  --
+    fx = (float)x;
 #ifdef DEBUG
 printf("Rezult: %d int.", x);
 cout << "  или: " << fx << endl;
@@ -216,8 +216,7 @@ int Device::refreshNORD_Z3M(int i){ //НОРД-З3М
         setErrData(err);
         return err;
     }else{
-        unsigned int x = 0;
-        x = buf[3];
+        unsigned int x = buf[3];
         x = (x << 8) | buf[2];
         x = (x << 8) | buf[1];
         x = (x << 8) | buf[0];
@@ -322,14 +321,7 @@ int Device::refreshUBZ_301_BO(int i){ //BO_01_MB_RTU - блок обмена О�
         return err;
     }else{
 //  --
-//        unsigned int x = 0;
-//        x = buf[3];
-//        x = (x << 8) | buf[2];
-//        x = (x << 8) | buf[1];
-//        x = (x << 8) | buf[0];
-//        float *pfx = (float*)&x;
-//        float fx = *pfx;
-//        idata[0] = (int)(fx * 100);
+//        idata[0] = (int)(getFloat(buf, buf_len) * 100);
 //  --
 //printf("Rezult: %f dec.", fx);
 //cout << "  или: " << fx << endl;
@@ -382,6 +374,17 @@ printf("DeviceOwenD: %d\n", x);
 
 /*************************************************************/
 //              Вспомогательные функции
+//  -------------------------------------------------------------------------
+float Device::getFloat(char * pack, int len){
+    if((len < 1) || (len > 4) || (pack == NULL))return E_DEV_DN;
+    len--;
+    unsigned int x = buf[len];
+    for(; len >= 0; len--) x = (x << 8) | buf[len];
+//  --
+    float *pfx = (float*)&x;
+    float fx = *pfx;
+return fx;
+}// End getFloat
 //  -------------------------------------------------------------------------
 int Device::getDanTM5132(int poz){
     int xss = E_DEV_PR;	// 21

@@ -68,6 +68,7 @@ private:
 //  --
 
 // Вспомогательные функции
+    float getFloat(char *pack, int len);	// получение числа из пакета
     int getDanTM5132(int poz);
 //  ----------------------
 //    char getParam(int poz);

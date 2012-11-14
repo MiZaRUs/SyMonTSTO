@@ -255,7 +255,7 @@ return 0;
 int Driver::unpakOWEN(unsigned char adr){	// распаковка OWEN
 cout << "unpakOWEN: buf_len = " << buf_len << endl;
     if((buf_len < 16) || (buf_len >= MAXBUF)) return E_DN;
-//cout << "прверить начало '#' и конец '0xD' в buf_r" << endl;
+cout << "прверить начало '#' и конец '0xD' в buf_r" << endl;
     if(( buf[0] != 0x23 ) || ( buf[buf_len-1] != 0xD ))return E_DN;
 // заполнить owen_frame и прверить пердел символов 'G ... V'.
 	int i, j;

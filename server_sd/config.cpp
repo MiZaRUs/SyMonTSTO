@@ -33,8 +33,7 @@ Config::Config(string sname){
     tcpport = 4001;		// Если = 0 то EXIT иначе SOCKET ( 950 )
 
 // драйвер обмена ( "ELEMER" | "DCON" | "OWEN" | "MB_RTU" | "MB_ASC" | "MB_ASC_B" )
-    driver = "MB_ASC_B";	//протокол обмена
-//    driver = "OWEN";	//протокол обмена
+    driver = "OWEN";	//протокол обмена
 
     timeaut = 500;
     tpause = 200;		// завершающая пауза в милисек
@@ -42,13 +41,13 @@ Config::Config(string sname){
 
 // For Device
     id = 1;			// идентификатор
-    adr = 3;			// сетевой адресс
-//    name = "PLC160_AI";		// название устройства "TM5132" "MB110_16D" "UBZ_301_BO" "NORD_Z3M"
-    name = "NORD_Z3M";
+    adr = 52;			// сетевой адресс
+//name - название устройства "TM5132" "MB110_16D" "PLC160_AI" "UBZ_301_BO" "NORD_Z3M"
+    name = "TRM101";
     param = "";		// параметры устройства
     format = "";		// формат данных
 //  --
-    reg = 1;
+    reg = 8;
     maxdev = 1;
 // End For Device
 // --

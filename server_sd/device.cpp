@@ -18,7 +18,7 @@
 //  --
 #include "device.h"
 //  --
-//#define DEBUG
+#define DEBUG
 //  -------------------------------------------------------------------------
 Device::Device(Config *cfg) : Driver(cfg->getDriver()){
     driv = cfg->getDriver();
@@ -38,13 +38,26 @@ Device::Device(Config *cfg) : Driver(cfg->getDriver()){
     msg.append(name);
 
 // зависит от устройства
+    if(name == "TRM101"){
+        msg.append(" -Y");
+        creg = 1;
+        refresh = &Device::refreshTRM101;
+    }
+//  --
+    if(name == "TRM138"){
+        msg.append(" -Y");
+        creg = 8;
+        refresh = &Device::refreshTRM138;
+    }
+//  --
     if(name == "NORD_Z3M"){
         msg.append(" -Y");
         creg = 1;
         idiap = 1;
-        fmodif = 1;
+        fmodif = 0.01;
         refresh = &Device::refreshNORD_Z3M;
     }
+//  --
     if(name == "TM5132"){
         msg.append(" -Y");
         creg = 4;
@@ -102,6 +115,90 @@ int Device::refreshXXX(int i){
 #endif
 return 0;
 }// End refreshXXX
+//  -------------------------------------------------------------------------
+int Device::refreshTRM101(int i){ //ТРМ101
+    unsigned char cmd[5];
+    int cmd_len = 0;
+    if(driv == "OWEN"){
+        cmd[0] = 0;		// внутренний адресс 4-бита
+        cmd[0] |= 0x10;		//признак запроса
+        cmd[0] |= 0;		// dataSize;
+        cmd[1] = 0xB8;		// (hash >> 8) & 0xff;
+        cmd[2] = 0xDF;		//  hash & 0xff;
+        cmd_len = 3; 
+    }// end owen
+//  --
+    if(Request( adr, cmd, cmd_len )) Response(adr);
+//  --
+    if(err){
+        setErrData(err);
+        return err;
+    }else{
+#ifdef DEBUG
+cout << "DeviceOwenSZ = " << buf_len << "  " << endl;
+cout << "HEX:"; for(int i=0; i < cmd_len; i++) printf(" %2x", buf[i]);
+cout << endl;
+#endif
+        unsigned int x = 0;
+        x = buf[0];
+        x = (x << 8) | buf[1];
+        x = (x << 8) | buf[2];
+//        x = (x << 8) | 0;
+        float *pfx = (float*)&x;
+        float fx = *pfx;
+        idata[0] = (int)(fx * 100);
+//  --
+#ifdef DEBUG
+printf("Rezult: %d int.", x);
+cout << "  или: " << fx << endl;
+#endif
+//  --
+
+    }
+    return err;
+} // End
+//  -------------------------------------------------------------------------
+int Device::refreshTRM138(int i){ //ТРМ138
+    unsigned char cmd[5];
+    int cmd_len = 0;
+    if(driv == "OWEN"){
+        cmd[0] = 0;		// внутренний адресс 4-бита
+        cmd[0] |= 0x10;		//признак запроса
+        cmd[0] |= 0;		// dataSize;
+//    hash = 0x8784 - "rEAd" | 0x2D26 - "r.Cn" | 0x2517 - "r.Cou" 
+        cmd[1] = 0x87;		//2d (hash >> 8) & 0xff;
+        cmd[2] = 0x84;		//26  hash & 0xff;
+        cmd_len = 3; 
+    }// end owen
+//  --
+    if(( driv == "MB_ASCII" ) || ( driv == "MB_RTU" )){
+        cmd[0] = 0x4;		//Func 03|04;
+        cmd[1] = 0x0;		// hi reg;
+        cmd[2] = 0x0;		// lo reg
+        cmd[3] = 0;	// hi;
+        cmd[4] = 1;     // lo;
+        cmd_len = 5;
+    }// end mb...
+//  --
+    if(Request( adr, cmd, cmd_len )) Response(adr);
+//printf("RezultRefreshOwen: %d\n", err);
+//  --
+    if(err){
+        setErrData(err);
+        return err;
+    }else{
+
+
+//#ifdef DEBUG
+cout << "DeviceOwenSZ = " << buf_len << "  " << endl;
+cout << "HEX:"; for(int i=0; i < cmd_len; i++) printf(" %2x", buf[i]);
+cout << endl;
+//#endif
+
+
+    }
+    return err;
+} // End
 //  -------------------------------------------------------------------------
 int Device::refreshNORD_Z3M(int i){ //НОРД-З3М
     unsigned char cmd[5];
@@ -234,8 +331,8 @@ int Device::refreshUBZ_301_BO(int i){ //BO_01_MB_RTU - блок обмена О�
 //        float fx = *pfx;
 //        idata[0] = (int)(fx * 100);
 //  --
-printf("Rezult: %f dec.", fx);
-cout << "  или: " << fx << endl;
+//printf("Rezult: %f dec.", fx);
+//cout << "  или: " << fx << endl;
 //  --
 #ifdef DEBUG
 cout << "CMD_HEX:"; for(int i=0; i < cmd_len; i++) printf(" %2x", cmd[i]);

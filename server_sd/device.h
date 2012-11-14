@@ -57,6 +57,8 @@ private:
     int (Device::*refresh)(int i);        // обновление
 //  ------------------------------------------------------------------------
     int refreshXXX(int i);
+    int refreshTRM101(int i);	// прибор ТРМ101 - Овен.
+    int refreshTRM138(int i);	// прибор ТРМ138 - Овен.
     int refreshNORD_Z3M(int i); // блок электронный НОРД-Э3М
     int refreshTM5132(int i); // ELEMER
     int refreshMB110_16D(int i);

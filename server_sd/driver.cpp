@@ -253,25 +253,27 @@ return 0;
 }// End parseMB110_16D_DCON
 //  -------------------------------------------------------------------------
 int Driver::unpakOWEN(unsigned char adr){	// распаковка OWEN
-//cout << "unpakOWEN: buf_len = " << buf_len << endl;
+cout << "unpakOWEN: buf_len = " << buf_len << endl;
     if((buf_len < 16) || (buf_len >= MAXBUF)) return E_DN;
 //cout << "прверить начало '#' и конец '0xD' в buf_r" << endl;
     if(( buf[0] != 0x23 ) || ( buf[buf_len-1] != 0xD ))return E_DN;
 // заполнить owen_frame и прверить пердел символов 'G ... V'.
 	int i, j;
     unsigned char frame[21];
-//cout <<  "прверить перделы символов (G ... V)" << endl;
+cout <<  "прверить пределы символов (G ... V)" << endl;
 	for (i = 1, j = 0; i < buf_len-2;  i += 2, ++j){
 		if(( 'G' > buf[i] ) && ( buf[i] > 'V' )) break;
 		if(( 'G' > buf[i+1] ) && ( buf[i+1] > 'V' )) break;
 		frame[j] = (buf[i] - 'G') << 4 | (buf[i+1] - 'G');
+printf("%x ", frame[j]);
 	}
     buf_len--;
     if( i != buf_len ) return E_DN;
     buf_len = (buf_len - 1) / 2;
 //  --
 // проверка адреса
-	if(frame[0] != adr)  return E_CP;	//чужой пакет - неверный адресс
+printf("\nПроверка адреса  %x\n", frame[0]);
+//	if(frame[0] != adr)  return E_CP;	//чужой пакет - неверный адресс
 	if((frame[1] & 0x10) != 0) return E_CP;	//чужой пакет - признак запроса
 // прверить hash ?  unsigned int hash = (frame[2] << 8) | frame[3];
 //printf ("Hash: %x\n", hash);
@@ -289,6 +291,8 @@ int Driver::unpakOWEN(unsigned char adr){	// распаковка OWEN
     buf[i] = 0;
     buf_len = i;
 //  --
+//for(i = 0; i < dataSize; i++) printf("%x",buf[i]);
+cout <<  "TransPort - Ok!" << endl;
 return 0;
 }// End parseMB110_16D_OWEN
 //  -------------------------------------------------------------------------

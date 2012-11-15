@@ -68,9 +68,9 @@ private:
 //  --
 
 // Вспомогательные функции
-    float getFloat(unsigned char *pack, int len);	// получение числа из пакета MODBUS
+    float getFloatMB(unsigned char *pack, int len);	// получение числа из пакета MODBUS
     float getFloatOwen(unsigned char *pack, int len);	// получение числа из пакета OWEN
-    int getDanTM5132(int poz);
+    int getDanTM5132(int poz);	// получение числа из пакета ELEMER
 //  ----------------------
 //    char getParam(int poz);
     void setErrData(int);

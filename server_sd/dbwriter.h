@@ -28,7 +28,6 @@ public:
     ~DBWriter();
 
     bool Write(Device *d);
-//    int status(void){return Err;};
     string getMsg(void){return msg;};
     bool oldClear(void);
 

@@ -52,9 +52,7 @@ Device::Device(Config *cfg) : Driver(cfg->getDriver()){
 //  --
     if(name == "NORD_Z3M"){
         msg.append(" -Y");
-        creg = 1;
-        idiap = 1;
-        fmodif = 0.01;
+        creg = 2;
         refresh = &Device::refreshNORD_Z3M;
     }
 //  --
@@ -197,10 +195,11 @@ cout << endl;
 int Device::refreshNORD_Z3M(int i){ //НОРД-З3М
     unsigned char cmd[5];
 //  --
+    if((creg < 1)||(creg > 3))creg = 0;
     cmd[0] = 0x1D;	//Func
     cmd[1] = 0x24;	// hi reg;
     cmd[2] = 0x00;	// lo reg
-    cmd[3] = 4;         // lo;
+    cmd[3] = 4 * creg;         // lo;
     int cmd_len = 4;
 //  --
     if(Request( adr, cmd, cmd_len )) Response(adr);
@@ -210,19 +209,16 @@ int Device::refreshNORD_Z3M(int i){ //НОРД-З3М
         setErrData(err);
         return err;
     }else{
-        unsigned int x = buf[3];
-        x = (x << 8) | buf[2];
-        x = (x << 8) | buf[1];
-        x = (x << 8) | buf[0];
-        float *pfx = (float*)&x;
-        float fx = *pfx;
-        idata[0] = (int)(fx * 1000);
+        for(int i = 0; i < creg; i++){
+//        for( int i = 0; i < creg; i++) idata[i] = getFloatMB(&buf[(i * 4)], 4);
+            float fx = getFloatMB(&buf[(i * 4)], 4);
+            idata[i] = (int)(fx * 100);
 //  --
 #ifdef DEBUG
-printf("Rezult: %f dec.", fx);
-cout << "  или: " << fx << endl;
+printf("Rezult: %f dec.\n", fx);
 #endif
 //  --
+        }
     }
     return err;
 } // End
@@ -233,7 +229,7 @@ int Device::refreshTM5132(int i){                   // ELEMER TM5132
     int len = sprintf((char*)fr,"6;0;%d;", creg);
 //  --
     if(Request( adr, fr, len )) Response(adr);
-//printf("RezultRefreshOwen: %d\n", err);
+//printf("RezultRefresh: %d\n", err);
 //  --
     if(err){
         setErrData(err);
@@ -267,7 +263,7 @@ int Device::refreshMB110_16D(int i){ //MB110_16D
     }// end mb...
 //  --
     if(Request( adr, cmd, cmd_len )) Response(adr);
-//printf("RezultRefreshOwen: %d\n", err);
+//printf("RezultRefresh: %d\n", err);
 //  --
     if(err){
         setErrData(err);
@@ -315,7 +311,7 @@ int Device::refreshUBZ_301_BO(int i){ //BO_01_MB_RTU - блок обмена О�
         return err;
     }else{
 //  --
-//        idata[0] = (int)(getFloat(buf, buf_len) * 100);
+//        idata[0] = (int)(getFloatMB(buf, buf_len) * 100);
 //  --
 //printf("Rezult: %f dec.", fx);
 //cout << "  или: " << fx << endl;
@@ -369,21 +365,21 @@ printf("DeviceOwenD: %d\n", x);
 /*************************************************************/
 //              Вспомогательные функции
 //  -------------------------------------------------------------------------
-float Device::getFloat(unsigned char * pack, int len){ // ИЗ MODBUS
+float Device::getFloatMB(unsigned char *pack, int len){ // ИЗ MODBUS
     if((len < 1) || (len > 4) || (pack == NULL))return E_DEV_DN;
     len--;
-    unsigned int x = buf[len];
-    for(; len >= 0; len--) x = (x << 8) | buf[len];
+    unsigned int x = pack[len];
+    for(; len >= 0; len--) x = (x << 8) | pack[len];
 //  --
     float *pfx = (float*)&x;
     float fx = *pfx;
 return fx;
 }// End getFloat
 //  -------------------------------------------------------------------------
-float Device::getFloatOwen(unsigned char * pack, int len){ // ИЗ OWEN
+float Device::getFloatOwen(unsigned char *pack, int len){ // ИЗ OWEN
     if((len < 3) || (len > 4) || (pack == NULL))return E_DEV_DN;
-    unsigned int x = buf[0];
-    for(int i = 1; i < len; i++) x = (x << 8) | buf[i];
+    unsigned int x = pack[0];
+    for(int i = 1; i < len; i++) x = (x << 8) | pack[i];
     if(len == 3)x = (x << 8) | 0;
 //  --
     float *pfx = (float*)&x;

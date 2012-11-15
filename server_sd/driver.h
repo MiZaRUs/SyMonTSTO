@@ -20,7 +20,7 @@ using namespace std;
 class Driver{
 //  --
 public:
-    Driver(string drv);// "OWEN"|"ELEMER"|"DCON"|"MODBUS_RTU"|"MODBUS_ASCII"
+    Driver(string drv);// "OWEN"|"ELEMER"|"DCON"|"MB_RTU"|"MB_ASC"|"MB_ASC_B"
     ~Driver();
 //  --
     bool Request(unsigned char adr,unsigned char *data, int len);	// запрос
@@ -44,7 +44,7 @@ private:
     int unpakMB_RTU(unsigned char adr);
     int unpakMB_ASC(unsigned char adr);
     int unpakMB_ASC_B(unsigned char adr);	// ModBus-ascii-bozna
-    int unpakXXX(unsigned char adr);	//пустышка
+    int unpakXXX(unsigned char adr);		//пустышка
 //  --
 protected:
     TransPort *trp;

@@ -13,8 +13,6 @@
 #include <math.h>
 #include <string.h>
 //  --
-//#include <memory.h>
-//  --
 #include "driver.h"
 //  --
 ////#define DEBUG
@@ -295,7 +293,7 @@ printf("%x ", frame[j]);
 //for(i = 0; i < dataSize; i++) printf("%x",buf[i]);
 cout <<  " << Ok!" << endl;
 return 0;
-}// End parseMB110_16D_OWEN
+}// End unpakOWEN
 //  -------------------------------------------------------------------------
 int Driver::unpakMB_ASC(unsigned char adr){	// распаковка MODBUS_ASCII
     if((buf_len < 11) || (buf_len >= MAXBUF)) return E_DN;

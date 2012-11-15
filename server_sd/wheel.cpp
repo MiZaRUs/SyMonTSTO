@@ -11,8 +11,6 @@
 #include <string.h>
 #include <signal.h>
 #include <iostream>
-//#include <fcntl.h>
-//#include <stdio.h>
 #include <errno.h>
 //  --
 #include "wheel.h"

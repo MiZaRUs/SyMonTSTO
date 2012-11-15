@@ -22,11 +22,9 @@ public:
     Daemon(string);
     ~Daemon();
     void Command(string);
-//    void Init(void);
     void Daemonize(void);
     void Run(void);
     void Exit(int);
-//    pid_t getPid(void){return pid;};
 
 protected:
 //private:

@@ -49,7 +49,6 @@ Daemon::Daemon(string name){
 //cout << "PidFile: " << pidfile << "\n";
 }// End Daemon
 //  -------------------------------------------------------------------------
-//void Daemon::Init(void){}// End Init
 //  -------------------------------------------------------------------------
 void Daemon::Run(void){
     int t = 3;

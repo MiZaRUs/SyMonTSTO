@@ -20,8 +20,8 @@ clean:
 	rm -f *.o
 
 install:
-	chmod 550 server_sd 
-	mv -f server_sd /opt/server_sd/
+#	chmod 550 server_sd 
+#	mv -f server_sd /opt/server_sd/
 #	mv -f server_sd ./script/server_sd/
 #	cp -fR ./script/server_sd /opt/
 #	cp -fR ./script/init.d/* /etc/init.d/

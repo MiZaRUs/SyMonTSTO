@@ -109,7 +109,7 @@ if(rez > 1){
     for(int i=0; i < rez; i++) printf(" %2c", buf[i]);
     cout << endl;
 }else{
-    cout << " -- Error( " << rez << " )!" << endl; // После 50 циклов можно перегрузить ?
+    cout << " -- Error( " << rez << " )!" << endl;
 }
 #endif
     return rez;

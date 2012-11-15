@@ -40,7 +40,7 @@ bool DBWriter::Write(Device *d){
 
 #ifdef DEBUG
 //-------------------------------------
-cout << "DBWriter-Write: adr ";
+cout << "DBWriter-Write: adr: ";
 cout << d->getAdr() << "  regs: ";
             char str[16];
             for(int qq = 0; qq < d->getCount();  qq++){
@@ -48,7 +48,7 @@ cout << d->getAdr() << "  regs: ";
 //        cout << (qq +1) << ". " << str << endl;
                 cout << (qq +1) << " = " << str << ";\t ";
             }
-cout << "-Integer." << endl;
+cout << "  -Integer." << endl;
 //-------------------------------------
 #else
     if(!mysql_real_connect(&mysql_rw, BDHOST, "oleg", "", BDNAME, 0,NULL,0)){

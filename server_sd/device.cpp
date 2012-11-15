@@ -129,26 +129,22 @@ int Device::refreshTRM101(int i){ //ТРМ101
     }// end owen
 //  --
     if(Request( adr, cmd, cmd_len )) Response(adr);
+    if(buf_len != 3)err = E_DEV_DN;	// можно идентифицировать ошибку устройства
 //  --
     if(err){
         setErrData(err);
         return err;
     }else{
 #ifdef DEBUG
-cout << "DeviceOwenSZ = " << buf_len << "  " << endl;
+cout << "Return Device: " << buf_len << " byte(s). >> ";
 cout << "HEX:"; for(int i=0; i < cmd_len; i++) printf(" %2x", buf[i]);
 cout << endl;
 #endif
-        unsigned int x = buf[0];
-        x = (x << 8) | buf[1];
-        x = (x << 8) | buf[2];
-        x = (x << 8) | 0;
-        float *pfx = (float*)&x;
-        float fx = *pfx;
+        float fx = getFloatOwen(buf, buf_len);
         idata[0] = (int)(fx * 100);
 //  --
 #ifdef DEBUG
-printf("Rezult: %d int. %f", x, fx);
+printf("Rezult: %f", fx);
 cout << "  или: " << fx << endl;
 #endif
 //  --
@@ -373,11 +369,22 @@ printf("DeviceOwenD: %d\n", x);
 /*************************************************************/
 //              Вспомогательные функции
 //  -------------------------------------------------------------------------
-float Device::getFloat(char * pack, int len){
+float Device::getFloat(unsigned char * pack, int len){ // ИЗ MODBUS
     if((len < 1) || (len > 4) || (pack == NULL))return E_DEV_DN;
     len--;
     unsigned int x = buf[len];
     for(; len >= 0; len--) x = (x << 8) | buf[len];
+//  --
+    float *pfx = (float*)&x;
+    float fx = *pfx;
+return fx;
+}// End getFloat
+//  -------------------------------------------------------------------------
+float Device::getFloatOwen(unsigned char * pack, int len){ // ИЗ OWEN
+    if((len < 3) || (len > 4) || (pack == NULL))return E_DEV_DN;
+    unsigned int x = buf[0];
+    for(int i = 1; i < len; i++) x = (x << 8) | buf[i];
+    if(len == 3)x = (x << 8) | 0;
 //  --
     float *pfx = (float*)&x;
     float fx = *pfx;

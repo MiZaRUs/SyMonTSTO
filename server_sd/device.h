@@ -60,7 +60,7 @@ private:
     int refreshTRM101(int i);	// прибор ТРМ101 - Овен.
     int refreshTRM138(int i);	// прибор ТРМ138 - Овен.
     int refreshNORD_Z3M(int i); // блок электронный НОРД-Э3М
-    int refreshTM5132(int i); // ELEMER
+    int refreshTM5132(int i);	// ELEMER
     int refreshMB110_16D(int i);
     int refreshUBZ_301_BO(int i); // блок обмена БО-01 для УБЗ-301 (универс.блок защиты)
 //    int refreshPLC160_DI(int i); // чтение дискретных данных - 4 байта

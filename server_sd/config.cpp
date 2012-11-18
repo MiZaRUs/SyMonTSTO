@@ -33,22 +33,21 @@ Config::Config(string sname){
     tcpport = 4001;		// Если = 0 то EXIT иначе SOCKET ( 950 )
 
 // драйвер обмена ( "ELEMER" | "DCON" | "OWEN" | "MB_RTU" | "MB_ASC" | "MB_ASC_B" )
-    driver = "MB_ASC_B";	//протокол обмена
+//    driver = "OWEN";	//протокол обмена
+    driver = "MB_ASC";	//протокол обмена
 
     timeaut = 500;
     tpause = 200;		// завершающая пауза в милисек
 
-
 // For Device
     id = 1;			// идентификатор
-    adr = 3;			// сетевой адресс NORD
-//    adr = 52;			// сетевой адресс TRM101
+    adr = 40;			// сетевой адресс NORD=3 TRM101=52
 //name - название устройства "TM5132" "MB110_16D" "PLC160_AI" "UBZ_301_BO" "NORD_Z3M" "TRM101"
-    name = "NORD_Z3M";
+    name = "TRM138";
     param = "";		// параметры устройства
     format = "";		// формат данных
 //  --
-    reg = 2;
+    reg = 8;
     maxdev = 1;
 // End For Device
 // --
@@ -74,7 +73,7 @@ bool Config::loadNetConf(void){
         msg.append(mysql_error(&mysql));
         return false;
     }
-//  --                                0        1        2         3       4          5          6        7        8
+//  --                   0     1    2       3      4       5      6       7
     string qu = "SELECT names,host,tcpport,tcicle,timeaut,tpause,tbldata,tblarch FROM ";
     qu.append(TBLCNF);
     qu.append(" WHERE tcpport > 0 AND names = '");
@@ -136,7 +135,7 @@ cout << "DevWheel::readConf()\n";
         msg.append(mysql_error(&mysql));
         return false;
     }
-//  --                              0   1     2        3        4     5         6
+//  --                  0   1     2       3     4    5      6
     string qu = "SELECT id, adr, driver, name, reg, param, format FROM ";
     qu.append(TBLDEV);
     qu.append(" WHERE adr > 0 AND reg > 0 AND sname = '");

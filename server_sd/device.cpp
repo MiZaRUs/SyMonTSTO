@@ -167,8 +167,8 @@ int Device::refreshTRM138(int i){ //ТРМ138
         cmd[0] = 0x4;		//Func 03|04;
         cmd[1] = 0x0;		// hi reg;
         cmd[2] = 0x0;		// lo reg
-        cmd[3] = 0;	// hi;
-        cmd[4] = 1;     // lo;
+        cmd[3] = 0;		// hi;
+        cmd[4] = 27;		// lo;
         cmd_len = 5;
     }// end mb...
 //  --

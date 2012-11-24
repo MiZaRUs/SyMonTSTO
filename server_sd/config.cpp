@@ -33,8 +33,7 @@ Config::Config(string sname){
     tcpport = 4001;		// Если = 0 то EXIT иначе SOCKET ( 950 )
 
 // драйвер обмена ( "ELEMER" | "DCON" | "OWEN" | "MB_RTU" | "MB_ASC" | "MB_ASC_B" )
-//    driver = "OWEN";	//протокол обмена
-    driver = "MB_ASC";	//протокол обмена
+    driver = "OWEN";	//протокол обмена
 
     timeaut = 500;
     tpause = 200;		// завершающая пауза в милисек

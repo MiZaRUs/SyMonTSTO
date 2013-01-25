@@ -1,4 +1,4 @@
-# Makefile for the socket programming example
+# Makefile for the emoxa
 #
 
 objects = ServerSocket.o Serial.o main.o

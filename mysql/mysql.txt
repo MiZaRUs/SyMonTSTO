@@ -1,4 +1,4 @@
-!!!! Возможны изменения
+Старая конфигурация - в дальнейшем использаваться не будет !!!
 USE server_sd;
 
 CREATE TABLE netconf ( names VARCHAR(24) NOT NULL, host VARCHAR(24) NOT NULL, tcpport INT NOT NULL, tcicle INT NOT NULL, timeaut INT NOT NULL, tpause INT NOT NULL, tbldata VARCHAR(24) NOT NULL, tblarch VARCHAR(24) NOT NULL, PRIMARY KEY (names)) CHARACTER SET utf8 COLLATE utf8_general_ci;
@@ -20,5 +20,53 @@ CREATE TABLE data_di ( id INT NOT NULL, reg INT NOT NULL, utime INT NOT NULL, da
 
 CREATE TABLE object ( id INT NOT NULL, ident VARCHAR(24) NOT NULL, area VARCHAR(24) NOT NULL, name VARCHAR(24), comment VARCHAR(40), PRIMARY KEY (id) ) CHARACTER SET utf8 COLLATE utf8_general_ci;
 CREATE TABLE param ( id INT NOT NULL, name VARCHAR(32) NOT NULL, comment VARCHAR(40) NOT NULL, PRIMARY KEY (id) ) CHARACTER SET utf8 COLLATE utf8_general_ci;
+//////////////////////////////////////////////
 
 
+Новая конфигурация. Возможны изменения !!!
+
+;идентификация сети и сервиса. общая для всех сетей.
+;идентификатор сервиса, ip и порт "моксы", время ожидания ответа, ожидание перед следующим запросом.
+;используется при создании симлинков и первоначальной настройки каждого сервиса
+CREATE TABLE netconf (net VARCHAR(24) NOT NULL, host VARCHAR(24) NOT NULL, port INT NOT NULL, taut INT NOT NULL, twite INT NOT NULL, PRIMARY KEY (net)) CHARACTER SET utf8 COLLATE utf8_general_ci;
+INSERT netconf (net,host,port,taut,twite) VALUES ('s_vds1_tm','10.0.10.46',4001,700,20000);
+INSERT netconf (net,host,port,taut,twite) VALUES ('s_vds1_zz','10.0.10.46',4002,700, 2000);
+INSERT netconf (net,host,port,taut,twite) VALUES ('s_vds5_di','10.0.10.47',4002,700, 1000);
+;
+;идентификация устройств сбора данных. общая для всех устройств.
+;идентификатор сервиса, адрес в сети, драйвер, название устройства, количество регистров, параметры устройства)
+;используется сервисами для создания виртуальных устройств
+CREATE TABLE devices (net VARCHAR(24), adr INT(3) NOT NULL, driver VARCHAR(24) NOT NULL, name VARCHAR(24) NOT NULL, id INT NOT NULL, creg INT(3) NOT NULL, params VARCHAR(32) NOT NULL, PRIMARY KEY (net,adr)) CHARACTER SET utf8 COLLATE utf8_general_ci;
+INSERT devices(net,adr,name,driver,id,creg,params) VALUES ('x',          1, 'TM5132',    'ELEMER', 1,  4, 'что угодно понятное драйверу');
+INSERT devices(net,adr,name,driver,id,creg,params) VALUES ('s_vds5_di', 21, 'MB110_16D', 'DCON',   2, 16, ';;;b;0/1');
+INSERT devices(net,adr,name,driver,id,creg,params) VALUES ('s_vds1_ai',  1, 'PLC160_AI', 'OWEN',   6,  1, ';;;f;0/1000');
+;
+;данные виртуальных устройств, заполняются автоматически, корректирует админ.
+;ID формируется из device.id * 1000 + device.reg, предел нечувствительности, модификатор, param.id, object.id, флаг состояния.
+;используется сервисами и клиентским ПО для идентификации, коррекции и масштабирования параметров объекта мониторинга
+CREATE TABLE control (id INT NOT NULL, diap INT NOT NULL, modif FLOAT NOT NULL, param  INT NOT NULL, object INT NOT NULL, flag INT NOT NULL, PRIMARY KEY (id) ) CHARACTER SET utf8 COLLATE utf8_general_ci;
+UPDATE control SET diap = 70,  modif = 1.5, param = 1000, object = 11, flag = 48 WHERE id = 51001;
+UPDATE control SET diap = 100, modif = 10,  param = 2001, object = 51, flag = 32 WHERE id = 52000;
+;
+;архивные данные параметров объекта мониторинга, заполняются автоматически
+;используется клиентским ПО для построения отчётов
+CREATE TABLE archiv (id INT NOT NULL, utime INT NOT NULL, data INT NOT NULL, PRIMARY KEY (id, utime) ) CHARACTER SET utf8 COLLATE utf8_general_ci;
+;
+;
+;идентификация объектов контроля.
+;ID - для devdata.object, идентификатор клиента, область, название, примечания)
+;используется клиентским ПО для создания меню выбора и идентификации данных в devdata и архив.
+CREATE TABLE object ( id INT NOT NULL, ident VARCHAR(24) NOT NULL, area VARCHAR(24) NOT NULL, name VARCHAR(24) NOT NULL, archiv VARCHAR(24), PRIMARY KEY (id) ) CHARACTER SET utf8 COLLATE utf8_general_ci;
+INSERT object (id,ident,area,name,archiv) VALUES (0, '?!', '?!', '?!', '?!');
+INSERT object (id,ident,area,name,archiv) VALUES (11, 'КИП ПЩ', 'ВДС-1', 'archiv');
+INSERT object (id,ident,area,name,archiv) VALUES (51, 'КИП ПЩ', 'ВДС-5', 'archiv');
+;
+;группы параметров и их формат.
+;ID - для devdata.param(group = 10 000), название, шкала и шаг измерений, примечания)
+;используется клиентским ПО для идентификации данных в devdata и в архивах.
+CREATE TABLE param (id INT NOT NULL, name VARCHAR(32) NOT NULL, scale VARCHAR(32) NOT NULL, comment VARCHAR(40), PRIMARY KEY (id) ) CHARACTER SET utf8 COLLATE utf8_general_ci;
+INSERT param (id,name,min,max,iter,comment) VALUES (0, '?!', 0, 10, 2, '?!');
+INSERT param (id,name,min,max,iter,comment) VALUES (10000, 'Давление воздуха П/С', 0, 1000, 100, '');
+INSERT param (id,name,min,max,iter,comment) VALUES (20001, 'Зазоры в.д.м.' 0.5, 2.5, 1, '' );
+INSERT param (id,name,min,max,iter,comment) VALUES (100001,'Питатель П/С' 0, 0, 1, 'вкл/выкл');
+//////////////////////////////////////////////////////////////////////////////////////////////

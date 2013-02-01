@@ -3,10 +3,10 @@ TARGET		 = ReportMaker
 
 QT		+= sql
 
-FORMS		+= inc_ui/calendar.ui inc_ui/button.ui
+FORMS		+= inc/calendar.ui inc/button.ui
 
-HEADERS		+= ../server_sd/defs.h parameter.h trend.h dbreader.h WxMain.h wxGrid.h \
+HEADERS		+= inc/defs.h parameter.h trend.h dbreader.h menu.h WxMain.h wxGrid.h \
                 BoxButton.h BoxCalendar.h BoxObject.h BoxReport.h
 
-SOURCES		+= main.cpp dbreader.cpp WxMain.cpp wxGrid.cpp \
+SOURCES		+= main.cpp dbreader.cpp menu.cpp WxMain.cpp wxGrid.cpp \
                 BoxButton.cpp BoxCalendar.cpp BoxObject.cpp BoxReport.cpp

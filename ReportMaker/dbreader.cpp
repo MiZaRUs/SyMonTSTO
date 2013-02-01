@@ -1,5 +1,14 @@
+/**************************************************************************
+ *  ReportMaker                                                           *
+ *  Copyright (C)  2012-2013   by  Oleg Shirokov      olgshir@gmail.com   *
+ *                                                                        *
+ *  This program is free software; you can redistribute it and/or modify  *
+ *  it under the terms of the GNU General Public License as published by  *
+ *  the Free Software Foundation; version 2 of the License, or            *
+ *  (at your option) any later version.                                   *
+ **************************************************************************/
 #include "dbreader.h"
-#include "../server_sd/defs.h"
+#include "defs.h"
 //  --
 QSqlError sqlErr;
 // ----------------------------------------------------------------------
@@ -42,6 +51,7 @@ BoxReport* DBReader::ReadReport(BoxObject *obj, BoxCalendar *cal){
     if(Err)throw QString(msg);
     msg  = "DBReader::ReadReport() - ";
 //  --
+//    static ?
     BoxReport *rez = new BoxReport(obj->name+"  "+cal->getStrDateTime()+QWidget::tr(" ч."));
     rez->hide();
 //  --
@@ -55,8 +65,8 @@ BoxReport* DBReader::ReadReport(BoxObject *obj, BoxCalendar *cal){
 //  --
 //получаем список архивов
     QString sarch[3];
-    sarch[0] = "arch_ai";
-    sarch[1] = "arch_di";
+    sarch[0] = "archiv";
+    sarch[1] = "";
     sarch[2] = "";
 // Расчитываем unix-время
     time_t nt = 0;
@@ -75,11 +85,11 @@ BoxReport* DBReader::ReadReport(BoxObject *obj, BoxCalendar *cal){
     int mtrnd = obj->maxParam();
 //qDebug() << "MaxP" << mtrnd;
     rez->trend = new Trend*[mtrnd];
-    rez->param = new Parametr*[mtrnd];
+    rez->param = new Parameter*[mtrnd];
     int i = 0;
     while(i < mtrnd){
         rez->param[i] = obj->getParam();
-        rez->trend[i] = readTrend(query, sarch, rez->param[i]->pidp, nt, usecs);
+        rez->trend[i] = readTrend(query, sarch, rez->param[i]->id, nt, usecs);
 //qDebug() << "Trnd" << i << "-" << rez->param[i]->name << rez->param[i]->comment << " -" << rez->trend[i]->size;
         i++;
     }
@@ -92,7 +102,7 @@ BoxReport* DBReader::ReadReport(BoxObject *obj, BoxCalendar *cal){
 return rez;
 }// End
 //  -------------------------------------------------------------------------
-Trend* DBReader::readTrend(QSqlQuery *query, QString *tabl, PidP p, time_t nt, int usecs){
+Trend* DBReader::readTrend(QSqlQuery *query, QString *tabl, int p, time_t nt, int usecs){
     time_t kt = nt + usecs;
     Trend *trn = new Trend;
     trn->point = NULL;
@@ -107,8 +117,8 @@ Trend* DBReader::readTrend(QSqlQuery *query, QString *tabl, PidP p, time_t nt, i
         if(is > MAXTBLARC)break;
 // Получаем точки от 'nt' до 'kt'.
         sql = (QString("SELECT utime, data FROM %1 WHERE \
-id = %2 AND reg = %3 AND utime >= %4 AND utime <= %5 ORDER BY utime")
-.arg(tabl[is]).arg(p.id).arg(p.reg).arg(nt).arg(kt));
+id = %2 AND utime >= %3 AND utime <= %4 ORDER BY utime")
+.arg(tabl[is]).arg(p).arg(nt).arg(kt));
 //  --
 //qDebug() << "Sql1 - " << sql;
         if(query->exec(sql)){
@@ -135,9 +145,9 @@ id = %2 AND reg = %3 AND utime >= %4 AND utime <= %5 ORDER BY utime")
 //qDebug() << "Tbl" << tabl[is];
 
 // Получаем начальную(до 'nt') точку.
-        sql = (QString("SELECT data FROM %1 WHERE id = %2 AND reg = %3 AND utime = \
-(SELECT MAX(utime) FROM %1 WHERE id = %2 AND reg = %3 AND utime < %4)")
-.arg(tabl[is]).arg(p.id).arg(p.reg).arg(nt));
+        sql = (QString("SELECT data FROM %1 WHERE id = %2 AND utime = \
+(SELECT MAX(utime) FROM %1 WHERE id = %2 AND utime < %3)")
+.arg(tabl[is]).arg(p).arg(nt));
 //  --
 //qDebug() << "Sql2 - " << sql;
 //  --
@@ -158,9 +168,9 @@ id = %2 AND reg = %3 AND utime >= %4 AND utime <= %5 ORDER BY utime")
 //qDebug() << "First - " << (int)trn->point[0].ry();
 //  --
 // Получаем заключительную(после 'kt') точку.
-        sql = (QString("SELECT data FROM %1 WHERE id = %2 AND reg = %3 AND utime = \
-(SELECT MIN(utime) FROM %1 WHERE id = %2 AND reg = %3 AND utime > %4)")
-.arg(tabl[is]).arg(p.id).arg(p.reg).arg(kt));
+        sql = (QString("SELECT data FROM %1 WHERE id = %2 AND utime = \
+(SELECT MIN(utime) FROM %1 WHERE id = %2 AND utime > %3)")
+.arg(tabl[is]).arg(p).arg(kt));
 //  --
 //qDebug() << "Sql3 - " << sql;
 //  --
@@ -196,6 +206,9 @@ id = %2 AND reg = %3 AND utime >= %4 AND utime <= %5 ORDER BY utime")
 }// End
 //  -------------------------------------------------------------------------
 //  -------------------------------------------------------------------------
+/*
+В данной версии используется статичное меню (menu.h menu.cpp)
+
 QMenu* DBReader::ReadMenu(QWidget *parent){
 //qDebug() << "DBReader::ReadMenu();";
     if(Err)throw QString(msg);
@@ -234,13 +247,13 @@ QMenu* DBReader::ReadMenu(QWidget *parent){
 //  --
 //	object(id, ident, area, name, comment)
     sql = QString("SELECT area, name, id FROM %1 WHERE id > 0 AND ident = '%2' ORDER BY id").arg(TBLOBJ).arg(identif);
-//qDebug() << "sql2: " << sql;
+qDebug() << "sql2: " << sql;
     if(query->exec(sql)){
         while(query->next()){
             QString ar1 = query->value(0).toString();
             QString ar2 = query->value(1).toString();
             QString ar3 = query->value(2).toString();
-//qDebug() << ar1 << " - " << ar2 << " - " << ar3;
+qDebug() << ar1 << " - " << ar2 << " - " << ar3;
             for(int i = 0; i < w; i++){
                 if(psub[i]->title() == ar1)psub[i]->addAction(ar2)->setObjectName(ar1+":"+ar3);
             }//for
@@ -286,26 +299,28 @@ BoxObject* DBReader::ReadObject(QString area, QString action, QString sid){
     QString sql;
 //  --
 //data_ai(id,reg,...,diap,modif,param,object,flag)  param(name,comment)
-    sql = QString("SELECT %1.id, %1.reg, %1.flag, %1.diap, %1.modif, %1.param, %2.name, %2.comment \
-FROM %1, %2, %3 WHERE %1.param = %2.id AND %1.object = %3.id AND %1.flag > 15 AND %3.id = %4 \
-ORDER BY %2.id").arg(TBLDAN).arg(TBLPRM).arg(TBLOBJ).arg(sid);
+    int gid = sid.toInt() / 10;
+    gid = gid * 10;
+qDebug() << "gid: " << gid;
+    sql = QString("SELECT %1.id, %1.flag, %1.diap, %1.modif, %1.param, %2.name, %2.comment \
+FROM %1, %2, %3 WHERE %1.param = %2.id AND (%1.object = %3.id OR %1.object = 1 OR %1.object = %5) \
+AND %1.flag > 15 AND %3.id = %4 ORDER BY %2.id").arg(TBLDAN).arg(TBLPRM).arg(TBLOBJ).arg(sid).arg(gid);
 //  --
-//qDebug() << "sql1: " << sql;
+qDebug() << "sql1: " << sql;
     int w = 0;
     if(query->exec(sql)){
         obj = new BoxObject(query->size());
         obj->hide();
         obj->name = area + " " + action;
-//qDebug() << "- " << area << action;
+qDebug() << "- " << area << action;
         while(query->next()){
-            obj->param[w].pidp.id = query->value(0).toInt();
-            obj->param[w].pidp.reg = query->value(1).toInt();
-            obj->param[w].flag = query->value(2).toInt();
-            obj->param[w].diap = query->value(3).toInt();
-            obj->param[w].modif = query->value(4).toFloat();
-            obj->param[w].group = query->value(5).toInt();// param
-            obj->param[w].name = query->value(6).toString();
-            obj->param[w].comment = query->value(7).toString();
+            obj->param[w].id = query->value(0).toInt();
+            obj->param[w].flag = query->value(1).toInt();
+            obj->param[w].diap = query->value(2).toInt();
+            obj->param[w].modif = query->value(3).toFloat();
+            obj->param[w].group = query->value(4).toInt();// param
+            obj->param[w].name = query->value(5).toString();
+            obj->param[w].comment = query->value(6).toString();
             obj->param[w].color = Qt::black;
             obj->param[w].charact = "";		// хар-ки тренда
             bool fl1 = false;
@@ -316,7 +331,7 @@ ORDER BY %2.id").arg(TBLDAN).arg(TBLPRM).arg(TBLOBJ).arg(sid);
             obj->check[w]->setEnabled(fl1);
             obj->check[w]->setChecked(fl2);
             obj->check[w]->setText(obj->param[w].name + " " + obj->param[w].comment);
-//qDebug() << "- " << obj->param[w].modif;
+qDebug() << "- " << obj->param[w].modif;
             w++;
         }// while
     }else{
@@ -331,6 +346,7 @@ ORDER BY %2.id").arg(TBLDAN).arg(TBLPRM).arg(TBLOBJ).arg(sid);
 //  --
 return obj;
 }//End ReadObj
+*/
 //  -------------------------------------------------------------------------
 DBReader::~DBReader(){
     QSqlDatabase::removeDatabase("qt_sql_default_connection");

@@ -1,6 +1,6 @@
 /**************************************************************************
- *  ReportMaker (SCADA)                                                   *
- *  Copyright (C)  2012   by  Oleg Shirokov       olgshir@gmail.com       *
+ *  ReportMaker    wxGrid.h                                               *
+ *  Copyright (C)  2012-2013   by  Oleg Shirokov      olgshir@gmail.com   *
  *                                                                        *
  *  This program is free software; you can redistribute it and/or modify  *
  *  it under the terms of the GNU General Public License as published by  *
@@ -14,6 +14,8 @@
 //  --
 #include "trend.h"
 #include "BoxObject.h"
+//const int MAXGRID = 16;
+//const int DATASCALE = 1000;
 const int MAXTREND = 8;
 // ===================================================================
 class WxGrid: public QWidget{
@@ -23,7 +25,7 @@ class WxGrid: public QWidget{
 public:
     WxGrid(QString gname, int t, int tn);
     void setDataScale(int d, float dn, float di);
-    int addTrend(Trend *trn, Parametr *prm);	//возвращает свободное место
+    int addTrend(Trend *trn, Parameter *prm);	//возвращает свободное место
 
 private:
     bool view;
@@ -34,7 +36,7 @@ private:
     int ysm, xsm;	// делений на шкале "санти" (размер шкалы)
 //  --
     Trend **trend;
-    Parametr **param;
+    Parameter **param;
     int curtrend;
     int maxtrend;
 //  --
@@ -45,6 +47,10 @@ private:
     int incTimeScale;
     float minDataScale;
     float incDataScale;
+//  --
+//    float xsms;		// смещение шкалы времени
+//    float ysms;		// смещение шкалы данных
+//    float thline;		// толщина линии
 // ------------------------------------------------------
     void drawGrid(QPainter *painter);
     void drawGraph(QPainter *painter);

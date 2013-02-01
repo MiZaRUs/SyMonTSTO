@@ -1,13 +1,22 @@
+/**************************************************************************
+ *  ReportMaker                                                           *
+ *  Copyright (C)  2012-2013   by  Oleg Shirokov      olgshir@gmail.com   *
+ *                                                                        *
+ *  This program is free software; you can redistribute it and/or modify  *
+ *  it under the terms of the GNU General Public License as published by  *
+ *  the Free Software Foundation; version 2 of the License, or            *
+ *  (at your option) any later version.                                   *
+ **************************************************************************/
 #include <QtGui>
 #include "BoxObject.h"
-#include "../server_sd/defs.h"
+//#include "defs.h"
 //  -------------------------------------------------------------------------
 BoxObject::BoxObject(int i, QWidget *parent) : QWidget(parent){
     size = i;
     name = "?!";
     cpar = 0;
 //  --
-    param = new Parametr[i];
+    param = new Parameter[i];
     if(!param)throw QString("BoxObject: new Parametr[]");
     check = new QCheckBox* [i];
     if(!check)throw QString("BoxObject: new QCheckBox*[]");
@@ -20,10 +29,10 @@ bool BoxObject::initBox(void){
     vl->setSpacing(6);
 //  --
 //  разделение групп
-    int tmp = (int)(param[0].group / FIXGROUP);
+    int tmp = param[0].group;
     for( int j = 0, t = 1; j < size; j++, t++){
-        if(tmp < (int)(param[j].group / FIXGROUP)){
-            tmp = (int)(param[j].group / FIXGROUP);
+        if(tmp < param[j].group){
+            tmp = param[j].group;
 //            maxgroup++;
             vl->addSpacing(30);
             t = 1;
@@ -49,9 +58,9 @@ return rez;
 //  -------------------------------------------------------------------------
 //Parametr* BoxObject::firstParam(void){}
 //  -------------------------------------------------------------------------
-Parametr* BoxObject::getParam(void){
+Parameter* BoxObject::getParam(void){
     if(cpar >= size) return NULL;
-    Parametr *par = NULL;
+    Parameter *par = NULL;
     while(cpar < size){
         if(check[cpar]->isChecked()){
             par = &param[cpar];
@@ -66,9 +75,9 @@ return par;
 //  -------------------------------------------------------------------------
 QColor BoxObject::getColor(int i){
     QColor c1(200, 0, 0); // krasn
-    QColor c2(0, 122, 0); // zelen
-    QColor c3(255, 0, 255); //seren
-    QColor c4(0, 0, 200); // siniy
+    QColor c2(0, 0, 200); // siniy
+    QColor c3(0, 122, 0); // zelen
+    QColor c4(255, 0, 255); //seren
     QColor c5(100, 100, 0); //korich
     QColor c6(0, 165, 155); //golub
     QColor c7(170, 170, 0); //jelt

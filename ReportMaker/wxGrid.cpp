@@ -1,4 +1,14 @@
+/**************************************************************************
+ *  ReportMaker    wxGrid.cpp                                             *
+ *  Copyright (C)  2012-2013   by  Oleg Shirokov      olgshir@gmail.com   *
+ *                                                                        *
+ *  This program is free software; you can redistribute it and/or modify  *
+ *  it under the terms of the GNU General Public License as published by  *
+ *  the Free Software Foundation; version 2 of the License, or            *
+ *  (at your option) any later version.                                   *
+ **************************************************************************/
 #include "wxGrid.h"
+//#include <math.h>
 // ----------------------------------------------------------------------
 WxGrid::WxGrid(QString gname, int t, int tn) : QWidget(){
 //qDebug() << "WxGrid::WxGrid" << gname << t << tn;
@@ -6,7 +16,7 @@ WxGrid::WxGrid(QString gname, int t, int tn) : QWidget(){
     groupName = gname;		//название группы
 //  --
     trend = new Trend*[MAXTREND];	// указатели на массив точек
-    param = new Parametr*[MAXTREND];	// указатели на параметры trenda
+    param = new Parameter*[MAXTREND];	// указатели на параметры trenda
     maxtrend = 0;			// количество указателей на массивы
 //  --
 //  шкала времени
@@ -62,11 +72,11 @@ void WxGrid::setDataScale(int d, float dn, float di){
     view = true;
 }
 // ----------------------------------------------------------------------
-int WxGrid::addTrend(Trend *trn, Parametr *prm){
+int WxGrid::addTrend(Trend *trn, Parameter *prm){
     if(MAXTREND <= maxtrend)return 0;
 //  --
     trend[maxtrend] = new Trend;	// указатели на массив точек
-    param[maxtrend] = new Parametr;	// указатели на параметры
+    param[maxtrend] = new Parameter;	// указатели на параметры
 //  --
     trend[maxtrend] = trn;		// указатели на массив точек
     param[maxtrend] = prm;
@@ -112,10 +122,10 @@ void WxGrid::drawGraph(QPainter *painter){
 //  --
     }else{	// Analog
         float mas = (float)yZero / (datascal * 100);
-        float fsm =  mas * 1;
+        float fsm = (float)mas * (minDataScale * incDataScale * 10);
         for(int i = 0; i < trend[curtrend]->size; i++){
             tp[i].rx() = (float)xP * trend[curtrend]->point[i].rx(); //time
-            tp[i].ry() = (float)yZero - ((trend[curtrend]->point[i].ry() * mas) + fsm); //data
+            tp[i].ry() = (float)yZero - ((trend[curtrend]->point[i].ry() * mas) - fsm); //data
 //qDebug() << "Tp  " << (int)tp[i].rx() << "  " << (float)tp[i].ry() << "*" << mas;
         }
     painter->setPen(QPen(param[curtrend]->color, 0.7));
@@ -164,19 +174,19 @@ void WxGrid::drawScale(QPainter *painter){
     painter->setPen(QPen(Qt::darkBlue, 0.7));
     for(int i = 1; i < xsm; i++){
         float num = (i + minTimeScale) * incTimeScale;
-        painter->drawText((xZero / xsm) * i + 2, 16, QString::number( num ));
+        painter->drawText((xZero / xsm) * i + 2, 10, QString::number( num ));
     }
 //  --
     if(datascal == 0){
         for(int i = 0; i < ysm; i++){
             int iter = ysm-i-1;
             painter->setPen(QPen(param[iter]->color, 0.7));
-            QString n = param[iter]->name + " " + param[iter]->comment;
+            QString n = param[iter]->name;
             painter->drawText(2, (yZero - (i * (yZero / ysm)) - 2), QString(tr("%1) %2.").arg(ysm-i).arg(n)));
         }
     }else{
         for(int i = 0, ii = yZero; i < ysm; i++){
-            float num = (i + minDataScale) * incDataScale;
+            float num = (i + (minDataScale / 10)) * incDataScale;
             if( num > 0 ) painter->setPen(QPen(Qt::darkRed, 0.7));
             if( num == 0 ) painter->setPen(QPen(Qt::black, 0.7));
             if( num < 0 ) painter->setPen(QPen(Qt::darkBlue, 0.7));
@@ -187,7 +197,7 @@ void WxGrid::drawScale(QPainter *painter){
         for(int i = 0; i < maxtrend; i++){
 //  установить соответстующий цвет из тренда
             painter->setPen(QPen(param[i]->color, 0.7));
-            painter->drawText(30, 30 + (16 * i), QString(tr("%1.").arg(param[i]->name + " " + param[i]->comment)));
+            painter->drawText(30, 30 + (16 * i), QString(tr("%1.").arg(param[i]->name)));
         }
     }
 }// End 
@@ -211,5 +221,4 @@ void WxGrid::paintEvent(QPaintEvent * /*event*/){
     }
     drawScale(&painter);
 }// End paintEvent
-// ----------------------------------------------------------------------
 // ----------------------------------------------------------------------

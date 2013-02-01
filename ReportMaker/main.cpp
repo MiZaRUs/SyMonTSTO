@@ -1,6 +1,6 @@
 /**************************************************************************
- *  ReportMaker (SCADA)                                                   *
- *  Copyright (C)  2012   by  Oleg Shirokov       olgshir@gmail.com       *
+ *  ReportMaker                                                           *
+ *  Copyright (C)  2012-2013   by  Oleg Shirokov      olgshir@gmail.com   *
  *                                                                        *
  *  This program is free software; you can redistribute it and/or modify  *
  *  it under the terms of the GNU General Public License as published by  *
@@ -11,13 +11,13 @@
 //  --
 #include "dbreader.h"
 #include "WxMain.h"
-#include "../server_sd/defs.h"
+#include "defs.h"
 //---------------------------------
 int main( int argc, char *argv[] ){
     QApplication app( argc, argv );
     QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
 //  ----------------
-    QString id = (argc > 1) ? argv[1] : QWidget::tr("Default");
+    QString id = (argc > 1) ? argv[1] : QWidget::tr("КИП ПЩ");
     try{
         DBReader *dbr = new DBReader(BDHOST, BDNAME, "oleg", "", id);
 //  ----------------

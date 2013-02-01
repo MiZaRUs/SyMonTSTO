@@ -1,6 +1,6 @@
 /**************************************************************************
- *  ReportMaker (SCADA)                                                   *
- *  Copyright (C)  2012   by  Oleg Shirokov       olgshir@gmail.com       *
+ *  ReportMaker                                                           *
+ *  Copyright (C)  2012-2013   by  Oleg Shirokov      olgshir@gmail.com   *
  *                                                                        *
  *  This program is free software; you can redistribute it and/or modify  *
  *  it under the terms of the GNU General Public License as published by  *
@@ -26,8 +26,8 @@ public:
     DBReader(QString dbhst, QString dbnme, QString dbusr, QString dbps, QString id = "def");
     virtual ~DBReader();
 
-    QMenu* ReadMenu(QWidget *parent);
-    BoxObject* ReadObject(QString area="", QString action="", QString sid=""); //параметры из меню
+//    QMenu* ReadMenu(QWidget *parent);
+//    BoxObject* ReadObject(QString area="", QString action="", QString sid=""); //параметры из меню
     BoxReport* ReadReport(BoxObject *obj, BoxCalendar *cal);
 //  --
     QString getMsg(void){return msg;};
@@ -44,7 +44,7 @@ private:
     QString identif;	// определяет выбор оборудования и параметров
 //  --
     bool connection(void);
-    Trend* readTrend(QSqlQuery *q, QString *tabl, PidP p, time_t nt=0, int usecs=0);
+    Trend* readTrend(QSqlQuery *q, QString *tabl, int p, time_t nt=0, int usecs=0);
 };
 //----------------------------------------------------------------
 #endif

@@ -1,6 +1,6 @@
 /**************************************************************************
- *  Server_SD (SCADA)                                                     *
- *  Copyright  (C)  2010-2013  by  Oleg Shirokov    olgshir@gmail.com     *
+ *  Server_SD  DAM  ipc.h                                                 *
+ *  Copyright  (C)  2012-2013  by  Oleg Shirokov    olgshir@gmail.com     *
  *                                                                        *
  *  This program is free software; you can redistribute it and/or modify  *
  *  it under the terms of the GNU General Public License as published by  *

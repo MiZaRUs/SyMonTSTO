@@ -1,4 +1,4 @@
-// confif DAM
+// config DAM
 //    create_transport( "/dev/ttyS0", 9600, 500 ); //    host, port, timeaut
     create_transport( "10.0.10.46", 4002, 550 ); //    host, port, timeaut
 //  --

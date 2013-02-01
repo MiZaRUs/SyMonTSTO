@@ -1,5 +1,13 @@
+/**************************************************************************
+ *  MonGraph  monitor.cpp  (Monitor & WxGrid)                             *
+ *  Copyright (C)  2010-2013   by  Oleg Shirokov      olgshir@gmail.com   *
+ *                                                                        *
+ *  This program is free software; you can redistribute it and/or modify  *
+ *  it under the terms of the GNU General Public License as published by  *
+ *  the Free Software Foundation; version 2 of the License, or            *
+ *  (at your option) any later version.                                   *
+ **************************************************************************/
 #include "monitor.h"
-
 // ----------------------------------------------------------------------
 Monitor::Monitor(void) : QWidget(){
 // ind_element, setka
@@ -74,8 +82,6 @@ void Monitor::setScale(int sc){
 // ----------------------------------------------------------------------
 // ----------------------------------------------------------------------
 // ----------------------------------------------------------------------
-//#include <math.h>
-//----------------------------------------------------------
 WxGrid::WxGrid(void) : QWidget(){
 //    setMouseTracking(true);
 //  шкала времени

@@ -1,3 +1,12 @@
+/**************************************************************************
+ *  MonGraph  WxMain.cpp                                                  *
+ *  Copyright (C)  2010-2013   by  Oleg Shirokov      olgshir@gmail.com   *
+ *                                                                        *
+ *  This program is free software; you can redistribute it and/or modify  *
+ *  it under the terms of the GNU General Public License as published by  *
+ *  the Free Software Foundation; version 2 of the License, or            *
+ *  (at your option) any later version.                                   *
+ **************************************************************************/
 #include <string.h>
 #include "WxMain.h"
 // ----------------------------------------------------------------------
@@ -286,9 +295,8 @@ void WxMain::slotActivHelp(){
                     "<BR>"
                     "<BR>"
         	"</P>"
-                "<H3><CENTER> Версия 0.7.7 </CENTER></H3>"
-                "<H4><CENTER> Февраль 2010 </CENTER></H4>"
-                "<H4><CENTER> Июнь 2011 </CENTER></H4>"
+                "<H3><CENTER> Версия 1.0 </CENTER></H3>"
+                "<H4><CENTER> Февраль 2013 </CENTER></H4>"
                 "<H4><CENTER> Широков О.Ю. </CENTER></H4>"
                 "<BR>"
                 "</BODY>"

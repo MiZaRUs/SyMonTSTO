@@ -13,7 +13,7 @@
 BoxCalendar::BoxCalendar(QWidget *parent) : QWidget(parent){
     setupUi(this);
 //  --
-    calendar->setMinimumDate(QDate(2013, 1, 20));
+    calendar->setMinimumDate(QDate(2013, 3, 1));
     calendar->setMaximumDate(QDate::currentDate());
 //  --
     calendar->setVerticalHeaderFormat(QCalendarWidget::VerticalHeaderFormat(QCalendarWidget::NoVerticalHeader));
@@ -29,6 +29,7 @@ BoxCalendar::BoxCalendar(QWidget *parent) : QWidget(parent){
     dateEdit->setDisplayFormat("d MM yyyy");
     dateEdit->setDateRange(calendar->minimumDate(),calendar->maximumDate());
     dateEdit->setDate(QDate::currentDate());
+    dateEdit->stepDown();
 //  --
     QStringList lstr1;
     QStringList lstr2;
@@ -36,7 +37,9 @@ BoxCalendar::BoxCalendar(QWidget *parent) : QWidget(parent){
     <<"13"<<"14"<<"15"<<"16"<<"17"<<"18"<<"19"<<"20"<<"21"<<"22"<<"23";
     lstr2 <<"1"<<"2"<<"4"<<"8"<<"12"<<"24"<<"48"<<"168";
     boxTimeN->addItems(lstr1);
+//    boxTimeN->setCurrentIndex(8);
     boxTimeK->addItems(lstr2);
+    boxTimeK->setCurrentIndex(5);
 //  --
 }
 //  -------------------------------------------------------------------------

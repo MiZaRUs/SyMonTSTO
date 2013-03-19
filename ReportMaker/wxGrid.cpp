@@ -94,7 +94,9 @@ void WxGrid::drawGraph(QPainter *painter){
     if((maxtrend < 1)||(trend[curtrend]->size < 1)) return;
 //    if((curtrend < 0)||(curtrend > MAXTREND)) return;
 //  --
-    QPointF tp[(trend[curtrend]->size +1)];
+//    QPointF tp[(trend[curtrend]->size +1)];
+    QPointF tp[((trend[curtrend]->size +1) * 2)];
+    int irx = 0;
 //  --
     if(datascal == 0){	// Discret
         painter->setPen(QPen(param[curtrend]->color, 2));
@@ -123,13 +125,24 @@ void WxGrid::drawGraph(QPainter *painter){
     }else{	// Analog
         float mas = (float)yZero / (datascal * 100);
         float fsm = (float)mas * (minDataScale * incDataScale * 10);
-        for(int i = 0; i < trend[curtrend]->size; i++){
-            tp[i].rx() = (float)xP * trend[curtrend]->point[i].rx(); //time
-            tp[i].ry() = (float)yZero - ((trend[curtrend]->point[i].ry() * mas) - fsm); //data
+
+        for(int i = 0; i < trend[curtrend]->size; i++, irx++){
+            tp[irx].rx() = (float)xP * trend[curtrend]->point[i].rx(); //time
+            float tmprx = 0, tmpry = 0;
+            if(irx > 0){
+                tmprx = tp[irx].rx() - tp[irx-1].rx();
+                tmpry = abs(tp[irx].ry() - tp[irx-1].ry());
+            }
+            if( (tmprx > 4) && (tmpry > 7)){
+                tp[irx].ry() = tp[irx-1].ry(); //data
+                irx++;
+                tp[irx].rx() = tp[irx-1].rx();
+            }
+            tp[irx].ry() = (float)yZero - ((trend[curtrend]->point[i].ry() * mas) - fsm); //data
 //qDebug() << "Tp  " << (int)tp[i].rx() << "  " << (float)tp[i].ry() << "*" << mas;
         }
     painter->setPen(QPen(param[curtrend]->color, 0.7));
-    painter->drawPolyline(tp, trend[curtrend]->size);
+    painter->drawPolyline(tp, irx);
     }
 }// End drawGraph
 // ----------------------------------------------------------------------

@@ -1,5 +1,5 @@
 /***************************************************************************
- *  Server_SD  DAM  devices.c                                             *
+ *  Server_SD  DAM  devices.c                                              *
  *  Copyright  (C)  2010-2013  by  Oleg Shirokov    olgshir@gmail.com      *
  *                                                                         *
  *  This program is free software; you can redistribute it and/or modify   *
@@ -127,37 +127,36 @@ return 0;
 }// End decoder_XXX
 //  -------------------------------------------------------------------------
 static int decoder_ELEMER( unsigned char adr, unsigned char *buf, int len ){// распаковка ELEMER
-    if( len < 7 ) return E_DRIVER;
+    if(( len < 7) || ( len > 1023 )) return E_DRIVER;
     unsigned char *ptr = buf;
     ptr++;	// !!!!!!!!!!!!!!!!!!!!!!!!!
-//fprintf(stderr, "%s\n", ptr );
     if( !( ptr[0] == '!' )) return E_DRIVER; // неответ
 //  --
-    int i;
+    char str[8];
+    memset( str, 0, sizeof( str ));
+    int i = 1, z = 0;
+    for(; ( ptr[i] >= '0' ) && ( ptr[i] <= '9' ); i++, z++ ){
+        str[z] = ptr[i];
+        if( z > 2 ) return E_DRIVER;	// неверный ответ
+    }
+    if( adr != (unsigned char)atoi( str )) return E_DRV_ID;	// неверный адресс
+    int a = i;
+//  --
     for( i = len - 1; ( ptr[i] != ';' ) && ( i > 3 ); i-- ){};
     if ( i < 4 ) return E_DRIVER;
     unsigned short tm_ks = ksumCRC( ptr + 1, i );
 //  --
     i++;
     if(( len - i ) > 7 ) return E_DRIVER;
-    char str[9];
-//  --
-    int a = 1, b = 0;
-    memset( str, 0, sizeof( str ));
-    for(; ( ptr[a] >= '0' ) && ( ptr[a] <= '9' ); a++, b++ ) str[b] = ptr[a];
-    if( adr != (unsigned char)atoi( str )) return E_DRV_ID;
 //  --
     int temp = i + 1;
-    int j = 0;
     memset( str, 0, sizeof( str ));
-    for( ;i < len; i++, j++ ) str[j] = ptr[i];
-//  --
+    for( z = 0; i < len; i++, z++ ) str[z] = ptr[i];
     if( tm_ks != atoi( str )) return E_DRV_KS;
 //  --
-    j = 0;
-    for( i = a + 2; i < temp; i++, j++ ) buf[j] = buf[i];
-    buf[j] = 0;
-return (j - 1);
+    for( i = a + 2, z = 0; i < temp; i++, z++ ) buf[z] = buf[i];
+    buf[z] = 0;
+return ( z - 1 );
 }// End decoder_ELEMER
 //  -------------------------------------------------------------------------
 static int decoder_DCON( unsigned char adr, unsigned char *buf, int len ){// распаковка DCON
@@ -307,7 +306,7 @@ return E_DRV_NO;
 //  -------------------------------------------------------------------------
 static int get_data_TM513X( int poz, unsigned char *buf, int len ){	// TM513X
 //printf( "get_data_TM513X\n" );
-    int xss = E_DEVICE;	// 21
+    int xss = E_DEVICE;
     char st[10];
     st[0] = 'x';
     st[1] = '\0';
@@ -319,7 +318,7 @@ static int get_data_TM513X( int poz, unsigned char *buf, int len ){	// TM513X
     }
     i++;
     if( poz == 0 ) i = 0;
-    if( i >= len ) return E_DEV_DN;	//20
+    if( i >= len ) return E_DEV_DN;
 
     j = 0;
     for( ; (( buf[i] >= '0' ) && ( buf[i] <= '9' )) || ( buf[i] == '.' ) || ( buf[i] == '$' ) || ( buf[i] == '-' ); i++, j++ ){

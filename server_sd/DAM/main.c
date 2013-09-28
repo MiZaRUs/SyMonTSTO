@@ -121,8 +121,9 @@ str_err = "start while";
             }// refresh
             usleep(50);
         }// for max_device
+str_err = "write_ipc";
         sprintf(( char* )fifo_msg + i_msg -1, "}#%d\n", i_msg );
-        if( write_ipc( fifo_msg, strlen( fifo_msg )) < 1) err = 2;
+        if( write_ipc( fifo_msg, strlen( fifo_msg )) < 1) break;;
 #else
         int i_msg = sprintf((char*)fifo_msg, "#%s:%d\n", d_name, max_point);
         for( i = 0; i < max_device; i++ ){
